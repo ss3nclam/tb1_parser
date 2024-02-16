@@ -1,10 +1,10 @@
 from typing import Literal
+
 from pandas import DataFrame, ExcelFile, read_excel
 
+from src.config import config
 from src.tb1_helper import TB1Helper
 from src.tb1_sheet import TB1Sheet
-
-from src.config import config
 
 
 class TB1():
