@@ -2,7 +2,7 @@ from typing import Literal
 
 from pandas import DataFrame, ExcelFile, read_excel
 
-from src.config import config
+from config import config
 from src.tb1_helper import TB1Helper
 from src.tb1_sheet import TB1Sheet
 
@@ -27,6 +27,7 @@ class TB1():
                     index_col=0,
                     usecols=config[f'{content}_SHEET']['columns_range'],
                     )
+                return sheet.dropna(axis=0, how='all')
             except Exception as error:
                 return
             
@@ -52,3 +53,4 @@ class TB1():
     def get(self, content: Literal['Ai', 'Di', 'Do']) -> TB1Sheet:
         out: TB1Sheet = self.__sheets.get(content)
         return out.test()
+        
