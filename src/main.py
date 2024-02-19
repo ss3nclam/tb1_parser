@@ -4,6 +4,8 @@ import sys
 
 import pandas
 
+from src.tb1 import TB1
+
 
 # Настройка логера
 logging.basicConfig(level=logging.DEBUG)
@@ -26,13 +28,14 @@ def main():
         sys.exit(1)
     
     # Попытка создания объекта из файла
-    logging.info(f'Чтение файла - {tb1_filename}')
+    logging.info('Чтение файла..')
     try:
         tb1 = TB1()
         if tb1.read(tb1_filename):
-            pass
+            for i in ('Ai', 'Di', 'Do'): # TODO
+                print(tb1.get(i))
         else:
-            logging.error('Ошибка чтения файла')
+            logging.error('Прекращение работы программы по причине ошибки чтения файла..')
             sys.exit(1)
     except Exception as error:
         logging.error(error)

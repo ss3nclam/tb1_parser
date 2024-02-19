@@ -1,22 +1,19 @@
 from re import fullmatch
+from typing import Literal
 
-
-types_regex = {
-    'Ai': r'^.*([Вв]х|[Аа]налог).*([Вв]х|[Аа]налог).*$',
-    'Di': r'^.*([Вв]х|[Дд]искр).*([Вв]х|[Дд]искр).*$',
-    'Do': r'^.*([Вв]ых|[Дд]искр).*([Вв]ых|[Дд]искр).*$'
-}
+import config
 
 
 class TB1Helper:
 
     @staticmethod
-    def search_sheet(names_list: list, content_type: str) -> str | None:
+    def search_sheet(names_list: list, content: Literal['Ai', 'Di', 'Do']) -> str | None:
         'Return name of the sheet by content type'
         #TODO Валидатор
         #TODO Логи
 
-        reg = types_regex.get(content_type)
+        # reg = types_regex.get(content_type)
+        reg = config.TB1[f'{content}_SHEET']['regex']
 
         for name in names_list:
             match = fullmatch(reg, name)

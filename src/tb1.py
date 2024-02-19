@@ -1,56 +1,62 @@
+import logging
+import sys
 from typing import Literal
 
 from pandas import DataFrame, ExcelFile, read_excel
 
-from config import config
+import config
 from src.tb1_helper import TB1Helper
-from src.tb1_sheet import TB1Sheet
 
 
-class TB1():
+class TB1(object):
 
-    def __init__(self, tb1_file: ExcelFile) -> None:
-        self.__file = tb1_file
-        self.__sheets: dict[DataFrame] | None
+    def __init__(self) -> None:
+        self.__filename: str
+        self.__sheet_names: list[int | str]
+        self.__sheets: dict
 
 
-    def __read_sheet(self, content: str, ignore_reserv=True) -> DataFrame | None:
-        # Получение имени листа по его содержимому
-        valid_sheet_name = TB1Helper.search_sheet(self.__file.sheet_names, content)
-
-        # Чтение всего листа
-        if valid_sheet_name:
-            try:
-                sheet: DataFrame = read_excel(
-                    self.__file,
-                    valid_sheet_name,
-                    index_col=0,
-                    usecols=config[f'{content}_SHEET']['columns_range'],
-                    )
-                return sheet.dropna(axis=0, how='all')
-            except Exception as error:
-                return
-            
-            # sheet.dropna(axis=0, how='all')
-            
-        # TODO Проверка на наличие шапки в листе
-        # TODO Очистка листа от пустых строк и резервов
-    
-    
-    def read(self) -> bool:
+    def read(self, filename: str) -> bool:
         try:
-            self.__sheets = {
-                content: TB1Sheet(
-                    self.__read_sheet(content)) for content in ('Ai', 'Di', 'Do')
-                }
-            if len(self.__sheets.keys()) != 3:
-                raise Exception
-            return True
-        except Exception as error:
-            return False
-    
+            self.__filename = filename
+            self.__sheet_names = ExcelFile(self.__filename).sheet_names
+            self.__sheets = {content: self.__read_sheet(content) for content in ('Ai', 'Di', 'Do')}
 
-    def get(self, content: Literal['Ai', 'Di', 'Do']) -> TB1Sheet:
-        out: TB1Sheet = self.__sheets.get(content)
-        return out.test()
+            return True if self.__sheets else False # TODO Придумай проверку
+
+        except Exception as error:
+            logging.error(f'Не удалость прочитать файл - {error}')
+            sys.exit(1)
+
+
+    def __read_sheet(self, content: Literal['Ai', 'Di', 'Do'], ignore_trash=True) -> DataFrame | None:
+        # Получить валидное название листа
+        valid_sheet_name = TB1Helper.search_sheet(self.__sheet_names, content)
+
+        if not valid_sheet_name:
+            return None
         
+        read_sheet: DataFrame = lambda x: read_excel(
+            self.__filename,
+            valid_sheet_name,
+            index_col=0,
+            header=x,
+            usecols=config.TB1[f'{content}_SHEET']['columns_range']
+        )
+
+        try:
+            # Проверка на шапку в начале листа
+            sheet: DataFrame = read_sheet(0)
+            if list(sheet)[0] == 'Unnamed: 1':
+                sheet = read_sheet(1)
+            
+            col_names = list(sheet)
+            return sheet.loc[sheet[col_names[0]] != 'Резерв'].dropna(axis=0, how='all') if ignore_trash else sheet
+        
+        except Exception as error:
+            logging.error(f'Ошибка чтения листа - {valid_sheet_name}: {error}')
+            return None
+        
+
+    def get(self, content: Literal['Ai', 'Di', 'Do']) -> DataFrame | None:
+        return self.__sheets.get(content)

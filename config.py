@@ -9,6 +9,6 @@ TB1 = {
     },
     'Do_SHEET': {
         'regex': r'^.*([Вв]ых|[Дд]искр).*([Вв]ых|[Дд]искр).*$',
-        'columns_range': 'A:B,F:K'
+        'columns_range': 'A:B,F,I'
     }
 }
