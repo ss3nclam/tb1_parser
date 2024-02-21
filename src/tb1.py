@@ -36,11 +36,11 @@ class TB1(object):
         if not valid_sheet_name:
             return None
         
-        read_sheet: DataFrame = lambda x: read_excel(
+        read_sheet: DataFrame = lambda header: read_excel(
             self.__filename,
             valid_sheet_name,
             index_col=0,
-            header=x,
+            header=header,
             usecols=config.TB1[f'{content}_SHEET']['columns_range']
         )
 

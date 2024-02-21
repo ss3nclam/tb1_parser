@@ -32,8 +32,7 @@ def main():
     try:
         tb1 = TB1()
         if tb1.read(tb1_filename):
-            for i in ('Ai', 'Di', 'Do'): # TODO
-                print(tb1.get(i))
+            print(tb1.get('Ai'))
         else:
             logging.error('Прекращение работы программы по причине ошибки чтения файла..')
             sys.exit(1)
