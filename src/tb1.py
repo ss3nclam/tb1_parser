@@ -36,15 +36,15 @@ class TB1(object):
         if not valid_sheet_name:
             return None
         
-        read_sheet: DataFrame = lambda header: read_excel(
-            self.__filename,
-            valid_sheet_name,
-            index_col=0,
-            header=header,
-            usecols=config.TB1[f'{content}_SHEET']['columns_range']
-        )
-
         try:
+            read_sheet: DataFrame = lambda header: read_excel(
+                self.__filename,
+                valid_sheet_name,
+                index_col=0,
+                header=header,
+                usecols=config.TB1[f'{content}_SHEET']['columns_range']
+            )
+
             # Проверка на шапку в начале листа
             sheet: DataFrame = read_sheet(0)
             if list(sheet)[0] == 'Unnamed: 1':
