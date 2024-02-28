@@ -56,11 +56,11 @@ class TB1(object):
             if not ignore_trash:
                 return sheet
             else:
-                # Очистка листа от мусора
-                sheet = sheet.loc[sheet[list(sheet)[1]] != 'Резерв'].dropna(axis=0, how='all').reset_index()
-                del sheet['index']
                 # Переименование колонок
                 sheet = sheet.rename(columns=dict(zip(list(sheet), list(config.TB1[f'{content}_SHEET']['columns']))))
+                # Очистка листа от мусора
+                sheet = sheet.loc[sheet['name'] != 'Резерв'].dropna(axis=0, how='all').reset_index()
+                del sheet['index']
                 return sheet
                 
         except Exception as error:
