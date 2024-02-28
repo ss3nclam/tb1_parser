@@ -20,3 +20,8 @@ class TB1Helper:
             if match:
                 return match.string
         return None
+    
+
+    @staticmethod
+    def parse_range(inp_string: str):
+        pass

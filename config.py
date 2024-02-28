@@ -6,14 +6,33 @@ OPC_UA = {
 TB1 = {
     'Ai_SHEET': {
         'regex': r'^.*([Вв]х|[Аа]налог).*([Вв]х|[Аа]налог).*$',
-        'columns_range': 'A:B,E:J'
+        'columns': {
+            'variable': 'A',
+            'name': 'B',
+            'range': 'E',
+            'alarm_range': 'G',
+            'warning_range': 'F',
+            # 'error_range': 'I'
+        }
     },
     'Di_SHEET': {
         'regex': r'^.*([Вв]х|[Дд]искр).*([Вв]х|[Дд]искр).*$',
-        'columns_range': 'A:B,F:K'
+        'columns': {
+            'variable': 'A',
+            'name': 'B',
+            'logic_value': 'F',
+            'alarm': 'G',
+            'warning': 'H',
+            'error': 'I',
+        }
     },
     'Do_SHEET': {
         'regex': r'^.*([Вв]ых|[Дд]искр).*([Вв]ых|[Дд]искр).*$',
-        'columns_range': 'A:B,F,I'
+        'columns': {
+            'variable': 'A',
+            'name': 'B',
+            'logic_value': 'F'
+            # TODO Дописать все нуженые поля
+        }
     }
 }

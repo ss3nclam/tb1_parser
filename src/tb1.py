@@ -30,29 +30,39 @@ class TB1(object):
 
 
     def __read_sheet(self, content: Literal['Ai', 'Di', 'Do'], ignore_trash=True) -> DataFrame | None:
-        # Получить валидное название листа
+        # Получение валидного названия листа
         valid_sheet_name = TB1Helper.search_sheet(self.__sheet_names, content)
 
         if not valid_sheet_name:
             return None
         
         try:
-            read_sheet: DataFrame = lambda header: read_excel(
+            # Поиск первой строки с контентом
+            first_col_content: list = read_excel(self.__filename, valid_sheet_name, header=None, nrows=10).iloc[:, 0].tolist()
+            for i, row in enumerate(first_col_content):
+                if content.upper() in str(row):
+                    start_index: int = i
+                    break
+                
+            # Чтение
+            sheet: DataFrame = read_excel(
                 self.__filename,
                 valid_sheet_name,
-                index_col=0,
-                header=header,
-                usecols=config.TB1[f'{content}_SHEET']['columns_range']
+                header=None,
+                skiprows=range(0, start_index),
+                usecols=','.join(config.TB1[f'{content}_SHEET']['columns'].values())
             )
 
-            # Проверка на шапку в начале листа
-            sheet: DataFrame = read_sheet(0)
-            if list(sheet)[0] == 'Unnamed: 1':
-                sheet = read_sheet(1)
-            
-            col_names = list(sheet)
-            return sheet.loc[sheet[col_names[0]] != 'Резерв'].dropna(axis=0, how='all') if ignore_trash else sheet
-        
+            if not ignore_trash:
+                return sheet
+            else:
+                # Очистка листа от мусора
+                sheet = sheet.loc[sheet[list(sheet)[1]] != 'Резерв'].dropna(axis=0, how='all').reset_index()
+                del sheet['index']
+                # Переименование колонок
+                sheet = sheet.rename(columns=dict(zip(list(sheet), list(config.TB1[f'{content}_SHEET']['columns']))))
+                return sheet
+                
         except Exception as error:
             logging.error(f'Ошибка чтения листа - {valid_sheet_name}: {error}')
             return None
