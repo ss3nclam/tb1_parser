@@ -33,10 +33,10 @@ def main():
         tb1 = TB1()
         if tb1.read(tb1_filename):
             # TODO
-            content = 'Ai'
-            for i in tb1.get(content).itertuples(name=content):
-                print(i)
-            # print(tb1.get('Ai'))
+            # content = 'Ai'
+            # for i in tb1.get(content).itertuples(name=content):
+                # print(i)
+            print(tb1.get('Ai'))
         else:
             logging.error('Прекращение работы программы по причине ошибки чтения файла..')
             sys.exit(1)

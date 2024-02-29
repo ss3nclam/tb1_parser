@@ -11,8 +11,8 @@ TB1 = {
             'name': 'B',
             'range': 'E',
             'alarm_range': 'G',
-            'warning_range': 'F',
-            # 'error_range': 'I'
+            'warning_range': 'H',
+            'error_range': 'I'
         }
     },
     'Di_SHEET': {
