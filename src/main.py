@@ -36,7 +36,6 @@ def main():
             content = 'Ai'
             for i in tb1.get(content).itertuples(name=content):
                 print(i)
-            print(tb1.get('Ai'))
         else:
             logging.error('Прекращение работы программы по причине ошибки чтения файла..')
             sys.exit(1)

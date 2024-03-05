@@ -1,11 +1,12 @@
 import logging
+from re import fullmatch
 import sys
 from typing import Literal
 
 from pandas import DataFrame, ExcelFile, read_excel
 
 import config
-from src.tb1_helper import TB1Helper
+# from src.tb1_helper import TB1Helper
 
 
 class TB1(object):
@@ -29,9 +30,23 @@ class TB1(object):
             sys.exit(1)
 
 
+    def __search_sheet(self, names_list: list, content: Literal['Ai', 'Di', 'Do']) -> str | None:
+        'Return name of the sheet by content type'
+        #TODO Валидатор
+        #TODO Логи
+
+        reg = config.TB1[f'{content}_SHEET']['regex']
+
+        for name in names_list:
+            match = fullmatch(reg, name)
+            if match:
+                return match.string
+        return None
+
+
     def __read_sheet(self, content: Literal['Ai', 'Di', 'Do'], ignore_trash=True) -> DataFrame | None:
         # Получение валидного названия листа
-        valid_sheet_name = TB1Helper.search_sheet(self.__sheet_names, content)
+        valid_sheet_name = self.__search_sheet(self.__sheet_names, content)
 
         if not valid_sheet_name:
             return None
