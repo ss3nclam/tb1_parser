@@ -29,12 +29,12 @@ class TB1(object):
             sys.exit(1)
 
 
-    def __search_sheet(self, names_list: list, content: Literal['Ai', 'Di', 'Do']) -> str | None:
+    def __search_sheet(self, names_list: list, content_type: Literal['Ai', 'Di', 'Do']) -> str | None:
         'Return name of the sheet by content type'
         #TODO Валидатор
         #TODO Логи
 
-        reg = config.TB1[f'{content}_SHEET']['regex']
+        reg = config.TB1[f'{content_type}_SHEET']['regex']
 
         for name in names_list:
             match = fullmatch(reg, name)
@@ -43,9 +43,9 @@ class TB1(object):
         return None
 
 
-    def __read_sheet(self, content: Literal['Ai', 'Di', 'Do'], ignore_trash=True) -> DataFrame | None:
+    def __read_sheet(self, content_type: Literal['Ai', 'Di', 'Do'], ignore_trash=True) -> DataFrame | None:
         # Получение валидного названия листа
-        valid_sheet_name = self.__search_sheet(self.__sheet_names, content)
+        valid_sheet_name = self.__search_sheet(self.__sheet_names, content_type)
 
         if not valid_sheet_name:
             return None
@@ -54,7 +54,7 @@ class TB1(object):
             # Поиск первой строки с контентом
             first_col_content: list = read_excel(self.__filename, valid_sheet_name, header=None, nrows=10).iloc[:, 0].tolist()
             for i, row in enumerate(first_col_content):
-                if content.upper() in str(row):
+                if content_type.upper() in str(row):
                     start_index: int = i
                     break
                 
@@ -64,14 +64,14 @@ class TB1(object):
                 valid_sheet_name,
                 header=None,
                 skiprows=range(0, start_index),
-                usecols=','.join(config.TB1[f'{content}_SHEET']['columns'].values())
+                usecols=','.join(config.TB1[f'{content_type}_SHEET']['columns'].values())
             )
 
             if not ignore_trash:
                 return sheet
             else:
                 # Переименование колонок
-                sheet = sheet.rename(columns=dict(zip(list(sheet), list(config.TB1[f'{content}_SHEET']['columns']))))
+                sheet = sheet.rename(columns=dict(zip(list(sheet), list(config.TB1[f'{content_type}_SHEET']['columns']))))
                 # Очистка листа от мусора
                 sheet = sheet.loc[sheet['name'] != 'Резерв'].dropna(axis=0, how='all').reset_index()
                 del sheet['index']
@@ -82,5 +82,6 @@ class TB1(object):
             return None
         
 
-    def get(self, content: Literal['Ai', 'Di', 'Do']) -> DataFrame | None:
-        return self.__sheets.get(content)
+    def get(self, content_type: Literal['Ai', 'Di', 'Do']) -> DataFrame | None:
+        "Getting sheet's dataframe from TB1"
+        return self.__sheets.get(content_type)

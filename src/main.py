@@ -5,6 +5,7 @@ import sys
 import pandas
 
 from src.tb1 import TB1
+from src.tb1_parser import TB1Parser
 
 
 # Настройка логера
@@ -31,11 +32,14 @@ def main():
     logging.info('Чтение файла..')
     try:
         tb1 = TB1()
+        parser = TB1Parser()
         if tb1.read(tb1_filename):
             # TODO
-            content = 'Ai'
-            for i in tb1.get(content).itertuples(name=content):
-                print(i)
+            # content = 'Ai'
+            # for i in tb1.get(content).itertuples(name=content):
+            #     print(i)
+            Ai_sheet = tb1.get('Ai')
+            lst = parser.get_Ai_signals(Ai_sheet)
         else:
             logging.error('Прекращение работы программы по причине ошибки чтения файла..')
             sys.exit(1)

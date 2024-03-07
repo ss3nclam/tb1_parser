@@ -7,7 +7,7 @@ TB1 = {
             'range': 'E',
             'alarm_range': 'G',
             'warning_range': 'H',
-            'error_range': 'I'
+            # 'error_range': 'I'
         }
     },
     'Di_SHEET': {
