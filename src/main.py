@@ -4,6 +4,7 @@ import sys
 
 import pandas
 
+from src.report_sheet_maker import ReportSheetMaker
 from src.tb1 import TB1
 from src.tb1_parser import TB1Parser
 
@@ -33,10 +34,12 @@ def main():
     try:
         tb1 = TB1()
         parser = TB1Parser()
+        reporter = ReportSheetMaker()
         if tb1.read(tb1_filename):
             # TODO
             Ai_sheet = tb1.get('Ai')
-            lst = parser.get_Ai_tuple(Ai_sheet)
+            lst = parser.get_Ai_storage(Ai_sheet)
+            print(reporter.get_empty(lst))
         else:
             logging.error('Прекращение работы программы по причине ошибки чтения файла..')
             sys.exit(1)

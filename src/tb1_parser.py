@@ -5,7 +5,8 @@ import sys
 from pandas import DataFrame
 
 import config
-from src.Ai_signal import AiSignal
+from src.ai_storage import AiStorage
+from src.ai_signal import AiSignal
 
 
 class TB1Parser:
@@ -46,17 +47,16 @@ class TB1Parser:
             start = end = 'parse_error'
             
         finally:
-            final_replace = lambda x: x.replace(',', '.') if isinstance(x, str) else x
-            return [final_replace(i) for i in (start, end)]
+            final_format = lambda x: float(x.replace(',', '.')) if isinstance(x, str) else x
+            return [final_format(i) for i in (start, end)]
 
 
-    def get_Ai_tuple(self, sheet: DataFrame) -> tuple[AiSignal]:
-        'Getting Ai signals tuple'
+    def get_Ai_storage(self, sheet: DataFrame) -> AiStorage:
         if not list(config.TB1['Ai_SHEET']['columns'].keys()) == list(sheet):
             logging.error('Парсер: передан неверный лист аналоговых сигналов')
             sys.exit(1)
 
-        out: list[AiSignal] = []
+        out = AiStorage()
 
         for row in sheet.itertuples(False, 'Signal'):
             logging.info(f'Парсер: получение значений для "{row.name}"')
@@ -66,7 +66,7 @@ class TB1Parser:
             new.LL, new.HL = self.__parse_raw_Ai_range(row.range)
             new.LW, new.HW = self.__parse_raw_Ai_range(row.warning_range)
             new.LA, new.HA = self.__parse_raw_Ai_range(row.alarm_range)
-            print(new)
+            # print(new)
             out.append(new)
 
-        return tuple(out)
+        return out
