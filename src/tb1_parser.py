@@ -1,7 +1,6 @@
 import logging
 import re
 import sys
-from typing import Any
 
 from pandas import DataFrame
 
@@ -9,56 +8,64 @@ import config
 from src.Ai_signal import AiSignal
 
 
-regex_main = r'((([Оо]т\s?)|([Дд]о\s?))?(([Мм]ен[а-я]+\s?)|([Бб]ол[а-я]+\s?)|[><])?((([Мм]ин([а-я]+\s?)?)|([Пп]л([а-я]+\s?)?)|[-+])\.?\s?)?([,.0-9]+))'
-
-
 class TB1Parser:
 
-    def __get_range(self, input: str) -> list[str]:
+    def __parse_raw_Ai_range(self, input: str) -> list[str]:
+        start = end = None
+
         try:
-            input = str(input).replace('\n', '')
-            if input in ('nan', 'нет'):
-                start = None
-                stop = None
+            if re.fullmatch(config.TB1['Ai_SHEET']['regex']['validate']['empty_range'], input):
+                return start, end
             
-            logging.info(f'Parser: поиск совпадений в "{input}"')
-            matches_list: list[Any] = re.findall(regex_main, input)
+            logging.info(f'Парсер: получение диапазона из "{input}"..')
 
-            if not matches_list or len(matches_list) > 2:
-                raise ValueError('некорректное количество совпадений')
-            
-            # for reg_groups in matches_list:
-            #     match = reg_groups[0]
-            
-            start, stop = [i[0] for i in matches_list]
-                
-        except Exception as error:
-            logging.error(f'Parser: не удалось распознать диапазон из "{input}" - {error}')
-            start = 'parse_error'
-            stop = 'parse_error'
+            # Очистка инпута от мусора
+            replace_methods: dict = config.TB1['Ai_SHEET']['regex']['replace']
+            for method in replace_methods:
+                method_data: dict = replace_methods.get(method)
+                pattern, new_value = (i for i in method_data.values())
+                input = re.sub(pattern, new_value, input)
 
+            # Поиск значений в очищеном инпуте
+            matches_list = re.findall(config.TB1['Ai_SHEET']['regex']['validate']['range_value'], input)
+            matches_count = len(matches_list)
+
+            if matches_count == 1:
+                for match in matches_list:
+                    if '<' in match[0]:
+                        start = match[1]
+                    elif '>' in match[0]:
+                        end = match[1]
+            elif matches_count == 2:
+                start, end = [i[1] for i in matches_list]
+            else:
+                raise ValueError
+
+        except ValueError:
+            logging.error(f'Парсер: ошибка получения диапазона из "{input}"')
+            start = end = 'parse_error'
+            
         finally:
-            return [start, stop]
+            final_replace = lambda x: x.replace(',', '.') if isinstance(x, str) else x
+            return [final_replace(i) for i in (start, end)]
 
 
-
-    def get_Ai_signals(self, sheet: DataFrame) -> tuple[AiSignal]:
+    def get_Ai_tuple(self, sheet: DataFrame) -> tuple[AiSignal]:
         'Getting Ai signals tuple'
         if not list(config.TB1['Ai_SHEET']['columns'].keys()) == list(sheet):
-            logging.error('Parser: передан неверный лист аналоговых сигналов')
+            logging.error('Парсер: передан неверный лист аналоговых сигналов')
             sys.exit(1)
 
         out: list[AiSignal] = []
 
         for row in sheet.itertuples(False, 'Signal'):
-            logging.info(f'Parser: получение значений для {row.name}')
+            logging.info(f'Парсер: получение значений для "{row.name}"')
             new = AiSignal()
             new.variable = row.variable
             new.name = row.name
-            new.LL, new.HL = self.__get_range(row.range)
-            new.LW, new.HW = self.__get_range(row.warning_range)
-            new.LA, new.HA = self.__get_range(row.alarm_range)
-
+            new.LL, new.HL = self.__parse_raw_Ai_range(row.range)
+            new.LW, new.HW = self.__parse_raw_Ai_range(row.warning_range)
+            new.LA, new.HA = self.__parse_raw_Ai_range(row.alarm_range)
             print(new)
             out.append(new)
 

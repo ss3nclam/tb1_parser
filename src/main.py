@@ -35,11 +35,8 @@ def main():
         parser = TB1Parser()
         if tb1.read(tb1_filename):
             # TODO
-            # content = 'Ai'
-            # for i in tb1.get(content).itertuples(name=content):
-            #     print(i)
             Ai_sheet = tb1.get('Ai')
-            lst = parser.get_Ai_signals(Ai_sheet)
+            lst = parser.get_Ai_tuple(Ai_sheet)
         else:
             logging.error('Прекращение работы программы по причине ошибки чтения файла..')
             sys.exit(1)

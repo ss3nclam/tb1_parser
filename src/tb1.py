@@ -34,7 +34,7 @@ class TB1(object):
         #TODO Валидатор
         #TODO Логи
 
-        reg = config.TB1[f'{content_type}_SHEET']['regex']
+        reg = config.TB1[f'{content_type}_SHEET']['regex']['validate']['sheet_name']
 
         for name in names_list:
             match = fullmatch(reg, name)
@@ -44,13 +44,14 @@ class TB1(object):
 
 
     def __read_sheet(self, content_type: Literal['Ai', 'Di', 'Do'], ignore_trash=True) -> DataFrame | None:
-        # Получение валидного названия листа
-        valid_sheet_name = self.__search_sheet(self.__sheet_names, content_type)
-
-        if not valid_sheet_name:
-            return None
-        
+        logging.info(f'Чтение листа {content_type}..')
         try:
+            # Получение валидного названия листа
+            valid_sheet_name = self.__search_sheet(self.__sheet_names, content_type)
+
+            if not valid_sheet_name:
+                return None
+
             # Поиск первой строки с контентом
             first_col_content: list = read_excel(self.__filename, valid_sheet_name, header=None, nrows=10).iloc[:, 0].tolist()
             for i, row in enumerate(first_col_content):
