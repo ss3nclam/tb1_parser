@@ -1,4 +1,4 @@
-from src.ai_storage import AiStorage
+from modules.ai.signal_list import AiSignalList
 
 
 class Report(object):

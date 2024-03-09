@@ -4,9 +4,9 @@ import sys
 
 from pandas import DataFrame
 
-import config
-from src.ai_storage import AiStorage
-from src.ai_signal import AiSignal
+import config as config
+from modules.ai.signal_list import AiSignalList
+from modules.ai.signal import AiSignal
 
 
 class TB1Parser:
@@ -51,12 +51,12 @@ class TB1Parser:
             return [final_format(i) for i in (start, end)]
 
 
-    def get_Ai_storage(self, sheet: DataFrame) -> AiStorage:
+    def get_Ai_storage(self, sheet: DataFrame) -> AiSignalList:
         if not list(config.TB1['Ai_SHEET']['columns'].keys()) == list(sheet):
             logging.error('Парсер: передан неверный лист аналоговых сигналов')
             sys.exit(1)
 
-        out = AiStorage()
+        out = AiSignalList()
 
         for row in sheet.itertuples(False, 'Signal'):
             logging.info(f'Парсер: получение значений для "{row.name}"')

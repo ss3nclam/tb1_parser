@@ -4,9 +4,9 @@ import sys
 
 import pandas
 
-from src.report_sheet_maker import ReportSheetMaker
-from src.tb1 import TB1
-from src.tb1_parser import TB1Parser
+from modules.report.sheet_maker import ReportSheetMaker
+from modules.tb1.parser import TB1Parser
+from modules.tb1.tb1 import TB1
 
 
 # Настройка логера
@@ -20,10 +20,11 @@ def main():
     
     # Поиск эксельки
     logging.info('Поиск эксель-файла в директории...')
-    valid_files = [filename for filename in os.listdir() if filename.endswith(('xlsx', 'xls'))]
+    valid_files = [filename for filename in os.listdir('temp') if filename.endswith(('xlsx', 'xls'))]
+    print(valid_files)
 
     if len(valid_files) == 1:
-        tb1_filename = valid_files[0]
+        tb1_filename = f'temp/{valid_files[0]}'
         logging.info(f'Найден файл - {tb1_filename}')
     else:
         logging.error('Неподдерживаемый формат или неверное количество эксель-файлов в директории')
@@ -45,3 +46,7 @@ def main():
             sys.exit(1)
     except Exception as error:
         logging.error(error)
+
+
+if __name__ == "__main__":
+    main()
