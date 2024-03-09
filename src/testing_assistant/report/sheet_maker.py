@@ -3,11 +3,11 @@ import logging
 from pandas import DataFrame
 
 import config as config
-from modules.ai.signal import AiSignal
-from modules.ai.signal_list import AiSignalList
-from modules.di.signal_list import DiSignalList
-from modules.do.signal_list import DoSignalList
-from modules.report.sheet import ReportSheet
+from testing_assistant.signals.ai_signal import AiSignal
+from testing_assistant.signals.ai_signal_list import AiSignalList
+from testing_assistant.signals.di_signal_list import DiSignalList
+from testing_assistant.signals.do_signal_list import DoSignalList
+from testing_assistant.report.sheet import ReportSheet
 
 
 class ReportSheetMaker:

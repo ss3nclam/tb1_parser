@@ -1,4 +1,4 @@
-from modules.ai.signal_list import AiSignalList
+from testing_assistant.signals.ai_signal_list import AiSignalList
 
 
 class Report(object):

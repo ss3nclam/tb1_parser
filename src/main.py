@@ -4,9 +4,9 @@ import sys
 
 import pandas
 
-from modules.report.sheet_maker import ReportSheetMaker
-from modules.tb1.parser import TB1Parser
-from modules.tb1.tb1 import TB1
+from testing_assistant.report.sheet_maker import ReportSheetMaker
+from testing_assistant.tb1.parser import TB1Parser
+from testing_assistant.tb1.tb1 import TB1
 
 
 # Настройка логера

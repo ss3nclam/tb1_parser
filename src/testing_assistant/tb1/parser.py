@@ -5,8 +5,8 @@ import sys
 from pandas import DataFrame
 
 import config as config
-from modules.ai.signal_list import AiSignalList
-from modules.ai.signal import AiSignal
+from testing_assistant.signals.ai_signal_list import AiSignalList
+from testing_assistant.signals.ai_signal import AiSignal
 
 
 class TB1Parser:
