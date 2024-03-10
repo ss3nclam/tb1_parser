@@ -66,7 +66,7 @@ TB1: dict = {
 REPORT: dict = {
     'sheets': {
         'Ai': {
-            'sheet_name': '',
+            'sheet_name': 'Аналог. вх',
             'columns': [
                 'Наименование параметра',
                 'Тип',

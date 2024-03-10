@@ -4,6 +4,7 @@ import sys
 
 import pandas
 
+from testing_assistant.report.report import Report
 from testing_assistant.report.sheet_maker import ReportSheetMaker
 from testing_assistant.tb1.parser import TB1Parser
 from testing_assistant.tb1.tb1 import TB1
@@ -14,6 +15,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 # Настройка полного вывода таблицы
 pandas.set_option("display.max_rows", None)
+pandas.set_option('display.max_colwidth', None)
 
 
 def main():
@@ -31,16 +33,19 @@ def main():
         sys.exit(1)
     
     # Попытка создания объекта из файла
-    logging.info('Чтение файла..')
     try:
         tb1 = TB1()
         parser = TB1Parser()
-        reporter = ReportSheetMaker()
+        report_sheet_maker = ReportSheetMaker()
+        report = Report()
         if tb1.read(tb1_filename):
             # TODO
-            Ai_sheet = tb1.get('Ai')
-            lst = parser.get_Ai_storage(Ai_sheet)
-            print(reporter.get_empty(lst))
+            tb_sheet = tb1.get('Ai')
+            signals = parser.get_Ai_storage(tb_sheet)
+            report_sheet = report_sheet_maker.get_empty(signals)
+            # report.add_sheet(report_sheet)
+            # report_sheet.to_excel('temp/test.xlsx', index=False)
+            print(report_sheet)
         else:
             logging.error('Прекращение работы программы по причине ошибки чтения файла..')
             sys.exit(1)
