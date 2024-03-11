@@ -21,14 +21,14 @@ class TB1Parser:
             logging.info(f'Парсер: получение диапазона из "{input}"..')
 
             # Очистка инпута от мусора
-            replace_methods: dict = config.TB1['Ai_SHEET']['regex']['replace']
+            replace_methods: dict = config.TB1['Ai_SHEET']['regex']['content']['replace']
             for method in replace_methods:
                 method_data: dict = replace_methods.get(method)
                 pattern, new_value = (i for i in method_data.values())
                 input = re.sub(pattern, new_value, input)
 
             # Поиск значений в очищеном инпуте
-            matches_list = re.findall(config.TB1['Ai_SHEET']['regex']['validate']['range_value'], input)
+            matches_list = re.findall(config.TB1['Ai_SHEET']['regex']['content']['validate']['range_value'], input)
             matches_count = len(matches_list)
 
             if matches_count == 1:
@@ -52,7 +52,7 @@ class TB1Parser:
 
 
     def get_Ai_signal_list(self, sheet: DataFrame) -> AiSignalList:
-        if not list(config.TB1['Ai_SHEET']['columns'].keys()) == list(sheet):
+        if not list(config.TB1['Ai_SHEET']['regex']['columns'].keys()) == list(sheet):
             logging.error('Парсер: передан неверный лист аналоговых сигналов')
             sys.exit(1)
 

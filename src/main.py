@@ -11,7 +11,8 @@ from testing_assistant.tb1.tb1 import TB1
 
 
 # Настройка логера
-logging.basicConfig(level=logging.DEBUG)
+# logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.ERROR)
 
 # Настройка полного вывода таблицы
 pandas.set_option("display.max_rows", None)
@@ -44,7 +45,7 @@ def main():
             signals = parser.get_Ai_signal_list(tb_sheet)
             report_sheet = report_sheet_maker.get_empty(signals)
             # report.add_sheet(report_sheet)
-            report_sheet.to_excel('temp/test.xlsx', index=False)
+            # report_sheet.to_excel('temp/test.xlsx', index=False)
             # print(report_sheet)
         else:
             logging.error('Прекращение работы программы по причине ошибки чтения файла..')
