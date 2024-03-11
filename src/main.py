@@ -41,11 +41,11 @@ def main():
         if tb1.read(tb1_filename):
             # TODO
             tb_sheet = tb1.get('Ai')
-            signals = parser.get_Ai_storage(tb_sheet)
+            signals = parser.get_Ai_signal_list(tb_sheet)
             report_sheet = report_sheet_maker.get_empty(signals)
             # report.add_sheet(report_sheet)
-            # report_sheet.to_excel('temp/test.xlsx', index=False)
-            print(report_sheet)
+            report_sheet.to_excel('temp/test.xlsx', index=False)
+            # print(report_sheet)
         else:
             logging.error('Прекращение работы программы по причине ошибки чтения файла..')
             sys.exit(1)

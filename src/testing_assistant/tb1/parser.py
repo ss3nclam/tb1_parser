@@ -51,7 +51,7 @@ class TB1Parser:
             return [final_format(i) for i in (start, end)]
 
 
-    def get_Ai_storage(self, sheet: DataFrame) -> AiSignalList:
+    def get_Ai_signal_list(self, sheet: DataFrame) -> AiSignalList:
         if not list(config.TB1['Ai_SHEET']['columns'].keys()) == list(sheet):
             logging.error('Парсер: передан неверный лист аналоговых сигналов')
             sys.exit(1)
