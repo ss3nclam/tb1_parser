@@ -34,8 +34,8 @@ class TB1(object):
 
     def __search_sheet(self, names_list: list, content_type: Literal['Ai', 'Di', 'Do']) -> str | None:
         'Return name of the sheet by content type'
-        #TODO Валидатор
-        #TODO Логи
+        # TODO Валидатор
+        # TODO Логи
 
         for name in names_list:
             match = re.fullmatch(config.TB1[f'{content_type}']['regex']['sheet']['validate']['name'], name)
