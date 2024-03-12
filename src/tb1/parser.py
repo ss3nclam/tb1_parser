@@ -11,24 +11,24 @@ from src.signals.ai_signal_list import AiSignalList
 
 class TB1Parser:
 
-    def __parse_raw_Ai_range(self, input: str) -> list[str]:
+    def __parse_raw_Ai_range(self, raw_range: str, description: str = 'измерения') -> list[str]:
         start = end = None
 
         try:
-            if re.fullmatch(config.TB1['Ai']['regex']['content']['validate']['empty_range'], input):
+            if re.fullmatch(config.TB1['Ai']['regex']['content']['validate']['empty_range'], raw_range):
                 return start, end
             
-            logging.info(f'Парсер: получение диапазона из "{input}"..')
+            logging.info(f'Парсер: получение диапазона {description} из "{raw_range}"..')
 
             # Очистка инпута от мусора
             replace_methods: dict = config.TB1['Ai']['regex']['content']['replace']
             for method in replace_methods:
                 method_data: dict = replace_methods.get(method)
                 pattern, new_value = (i for i in method_data.values())
-                input = re.sub(pattern, new_value, input)
+                raw_range = re.sub(pattern, new_value, raw_range)
 
             # Поиск значений в очищеном инпуте
-            matches_list = re.findall(config.TB1['Ai']['regex']['content']['validate']['range_value'], input)
+            matches_list = re.findall(config.TB1['Ai']['regex']['content']['validate']['range_value'], raw_range)
             matches_count = len(matches_list)
 
             if matches_count == 1:
@@ -43,7 +43,7 @@ class TB1Parser:
                 raise ValueError
 
         except ValueError:
-            logging.error(f'Парсер: ошибка получения диапазона из "{input}"')
+            logging.error(f'Парсер: ошибка получения диапазона из "{raw_range}"')
             start = end = 'parse_error'
             
         finally:
@@ -66,8 +66,8 @@ class TB1Parser:
             new.variable = row.variable
             new.name = row.name
             new.LL, new.HL = self.__parse_raw_Ai_range(row.range)
-            new.LW, new.HW = self.__parse_raw_Ai_range(row.warning_range)
-            new.LA, new.HA = self.__parse_raw_Ai_range(row.alarm_range)
+            new.LW, new.HW = self.__parse_raw_Ai_range(row.warning_range, 'ПС')
+            new.LA, new.HA = self.__parse_raw_Ai_range(row.alarm_range, 'АС')
             out.append(new)
 
         return out

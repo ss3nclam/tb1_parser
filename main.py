@@ -11,8 +11,8 @@ from src.tb1.tb1 import TB1
 
 
 # Настройка логера
-# logging.basicConfig(level=logging.DEBUG)
-logging.basicConfig(level=logging.ERROR)
+logging.basicConfig(level=logging.DEBUG)
+# logging.basicConfig(level=logging.ERROR)
 
 # Настройка полного вывода таблицы
 pandas.set_option("display.max_rows", None)

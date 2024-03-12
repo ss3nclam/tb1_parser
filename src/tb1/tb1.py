@@ -8,7 +8,7 @@ from pandas import DataFrame, ExcelFile, read_excel
 import config
 
 
-# FIXME Переписать в чистовик
+# REFACT Пересобрать весь класс
 class TB1(object):
 
     def __init__(self) -> None:
@@ -34,9 +34,6 @@ class TB1(object):
 
     def __search_sheet(self, names_list: list, content_type: Literal['Ai', 'Di', 'Do']) -> str | None:
         'Return name of the sheet by content type'
-        # TODO Валидатор
-        # TODO Логи
-
         for name in names_list:
             match = re.fullmatch(config.TB1[f'{content_type}']['regex']['sheet']['validate']['name'], name)
             if match:
@@ -44,7 +41,8 @@ class TB1(object):
         return None
 
 
-    def __get_columns_range(self, header_rows: tuple, content_type: Literal['Ai', 'Di', 'Do']): # TODO Отрефакторить бардак
+    # REFACT Алгоритм парсинга диапазонов
+    def __get_columns_range(self, header_rows: tuple, content_type: Literal['Ai', 'Di', 'Do']):
         conf = config.TB1[f'{content_type}']['regex']['columns']
         required_columns: dict = conf['validate']['names']
         output_range = []
