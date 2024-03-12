@@ -1,6 +1,6 @@
 import logging
 
-import config
+import testing_assistant.config as config
 from testing_assistant.report.sheets import ReportAiSheet
 from testing_assistant.signals.ai_signal import AiSignal
 from testing_assistant.signals.ai_signal_list import AiSignalList

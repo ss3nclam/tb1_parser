@@ -1,10 +1,8 @@
 import logging
 import re
 import sys
-
 from pandas import DataFrame
-
-import config as config
+from testing_assistant import config
 from testing_assistant.signals.ai_signal_list import AiSignalList
 from testing_assistant.signals.ai_signal import AiSignal
 
@@ -15,20 +13,20 @@ class TB1Parser:
         start = end = None
 
         try:
-            if re.fullmatch(config.TB1['Ai_SHEET']['regex']['validate']['empty_range'], input):
+            if re.fullmatch(config.TB1['Ai']['regex']['content']['validate']['empty_range'], input):
                 return start, end
             
             logging.info(f'Парсер: получение диапазона из "{input}"..')
 
             # Очистка инпута от мусора
-            replace_methods: dict = config.TB1['Ai_SHEET']['regex']['content']['replace']
+            replace_methods: dict = config.TB1['Ai']['regex']['content']['replace']
             for method in replace_methods:
                 method_data: dict = replace_methods.get(method)
                 pattern, new_value = (i for i in method_data.values())
                 input = re.sub(pattern, new_value, input)
 
             # Поиск значений в очищеном инпуте
-            matches_list = re.findall(config.TB1['Ai_SHEET']['regex']['content']['validate']['range_value'], input)
+            matches_list = re.findall(config.TB1['Ai']['regex']['content']['validate']['range_value'], input)
             matches_count = len(matches_list)
 
             if matches_count == 1:
@@ -48,11 +46,13 @@ class TB1Parser:
             
         finally:
             final_format = lambda x: float(x.replace(',', '.')) if isinstance(x, str) else x
-            return [final_format(i) for i in (start, end)]
+            pre_out = (start, end)
+            out = pre_out if None in pre_out else sorted(pre_out)
+            return [final_format(i) for i in out]
 
 
     def get_Ai_signal_list(self, sheet: DataFrame) -> AiSignalList:
-        if not list(config.TB1['Ai_SHEET']['regex']['columns'].keys()) == list(sheet):
+        if not list(config.TB1['Ai']['regex']['columns']['validate']['names'].keys()) == list(sheet):
             logging.error('Парсер: передан неверный лист аналоговых сигналов')
             sys.exit(1)
 
@@ -66,7 +66,6 @@ class TB1Parser:
             new.LL, new.HL = self.__parse_raw_Ai_range(row.range)
             new.LW, new.HW = self.__parse_raw_Ai_range(row.warning_range)
             new.LA, new.HA = self.__parse_raw_Ai_range(row.alarm_range)
-            # print(new)
             out.append(new)
 
         return out

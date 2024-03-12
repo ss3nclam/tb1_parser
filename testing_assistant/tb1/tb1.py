@@ -5,9 +5,10 @@ from typing import Literal
 
 from pandas import DataFrame, ExcelFile, read_excel
 
-import config
+import testing_assistant.config as config
 
 
+# FIXME Переписать в чистовик
 class TB1(object):
 
     def __init__(self) -> None:
@@ -43,16 +44,25 @@ class TB1(object):
         return None
 
 
-    def __search_column(self):
-        pass
-
-
-    def __get_columns_range(self, header_rows: tuple, content_type: Literal['Ai', 'Di', 'Do']):
-        required_columns = config.TB1[f'{content_type}']['regex']['columns']['validate']['names'].keys()
-
-        output = []
+    def __get_columns_range(self, header_rows: tuple, content_type: Literal['Ai', 'Di', 'Do']): # TODO Отрефакторить бардак
+        conf = config.TB1[f'{content_type}']['regex']['columns']
+        required_columns: dict = conf['validate']['names']
+        output_range = []
+        output_col_names = []
         for row in header_rows:
-            pass #TODO Here
+            for cell_index, cell_value in enumerate(row):
+                if not isinstance(cell_value, str): continue
+                for required_col_name in required_columns:
+                    replace_conf = conf['replace']['trash']
+                    clear_cell_value = re.sub(replace_conf['pattern'], replace_conf['new_value'], cell_value)
+                    match = re.fullmatch(required_columns[required_col_name], clear_cell_value)
+                    if match:
+                        output_range.append(cell_index)
+                        output_col_names.append(required_col_name)
+        if len(required_columns) != len(output_range):
+            raise ValueError('Это жопа!')
+        return ','.join(chr(i + 97) for i in output_range).upper(), output_col_names
+
 
 
     def __read_sheet(self, content_type: Literal['Ai', 'Di', 'Do'], ignore_trash=True) -> DataFrame | None:
@@ -64,7 +74,7 @@ class TB1(object):
             if not valid_sheet_name:
                 return None
 
-            # TODO Поиск первой строки с контентом и индексов нужных столбцов
+            # Поиск первой строки с контентом и индексов нужных столбцов
             test_df: DataFrame = read_excel(self.__filename, valid_sheet_name, header=None, nrows=10)
             first_col_content: list = test_df.iloc[:, 0].tolist()
             for i, row in enumerate(first_col_content):
@@ -72,28 +82,28 @@ class TB1(object):
                     start_index: int = i
                     break
             
-            # print(tuple(header_rows))
 
-            header_rows = tuple(test_df.loc[row_index].tolist() for row_index in range(start_index))
+            header_rows = list(test_df.loc[row_index].tolist() for row_index in range(start_index))
             # Чтение
-            # columns_range = self.__get_columns_range(header_rows)
+            columns = self.__get_columns_range(header_rows, content_type)
             sheet: DataFrame = read_excel(
                 self.__filename,
                 valid_sheet_name,
                 header = None,
                 skiprows = range(0, start_index),
-                usecols = self.__get_columns_range(header_rows, content_type)
-                # usecols=','.join(config.TB1[f'{content_type}']['regex']['columns'].values())
+                usecols = columns[0]
             )
-
+            
             if not ignore_trash:
                 return sheet
             else:
                 # Переименование колонок
-                sheet = sheet.rename(columns=dict(zip(list(sheet), list(config.TB1[f'{content_type}_SHEET']['regex']['columns']))))
+                sheet = sheet.rename(columns=dict(zip(list(sheet), columns[1])))
                 # Очистка листа от мусора
                 sheet = sheet.loc[sheet['name'] != 'Резерв'].dropna(axis=0, how='all').reset_index()
                 del sheet['index']
+                normalize = list(config.TB1[f'{content_type}']['regex']['columns']['validate']['names'])
+                sheet = sheet[normalize]
                 return sheet
                 
         except Exception as error:
