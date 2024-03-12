@@ -1,11 +1,11 @@
 import logging
-import sys
 import re
+import sys
 from typing import Literal
 
 from pandas import DataFrame, ExcelFile, read_excel
 
-import testing_assistant.config as config
+import config
 
 
 # FIXME Переписать в чистовик

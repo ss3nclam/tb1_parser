@@ -1,10 +1,12 @@
 import logging
 import re
 import sys
+
 from pandas import DataFrame
-from testing_assistant import config
-from testing_assistant.signals.ai_signal_list import AiSignalList
-from testing_assistant.signals.ai_signal import AiSignal
+
+import config
+from src.signals.ai_signal import AiSignal
+from src.signals.ai_signal_list import AiSignalList
 
 
 class TB1Parser:

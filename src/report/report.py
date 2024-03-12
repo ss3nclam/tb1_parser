@@ -1,5 +1,5 @@
 import logging
-from testing_assistant.report.sheets import ReportAiSheet, ReportDiSheet, ReportDoSheet
+from src.report.sheets import ReportAiSheet, ReportDiSheet, ReportDoSheet
 
 
 class Report(object):

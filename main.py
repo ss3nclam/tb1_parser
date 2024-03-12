@@ -4,10 +4,10 @@ import sys
 
 import pandas
 
-from testing_assistant.report.report import Report
-from testing_assistant.report.sheet_maker import ReportSheetMaker
-from testing_assistant.tb1.parser import TB1Parser
-from testing_assistant.tb1.tb1 import TB1
+from src.report.report import Report
+from src.report.sheet_maker import ReportSheetMaker
+from src.tb1.parser import TB1Parser
+from src.tb1.tb1 import TB1
 
 
 # Настройка логера

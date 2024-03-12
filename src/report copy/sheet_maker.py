@@ -1,11 +1,11 @@
 import logging
 
-import testing_assistant.config as config
-from testing_assistant.report.sheets import ReportAiSheet
-from testing_assistant.signals.ai_signal import AiSignal
-from testing_assistant.signals.ai_signal_list import AiSignalList
-from testing_assistant.signals.di_signal_list import DiSignalList
-from testing_assistant.signals.do_signal_list import DoSignalList
+import config
+from src.report.sheets import ReportAiSheet
+from src.signals.ai_signal import AiSignal
+from src.signals.ai_signal_list import AiSignalList
+from src.signals.di_signal_list import DiSignalList
+from src.signals.do_signal_list import DoSignalList
 
 
 class ReportSheetMaker:

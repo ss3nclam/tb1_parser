@@ -1,6 +1,6 @@
 from pandas import DataFrame
 
-from testing_assistant.config import REPORT as config
+from config import REPORT as config
 
 
 config = config['sheets']
