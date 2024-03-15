@@ -8,7 +8,7 @@ from pandas import DataFrame, ExcelFile, read_excel
 import config
 
 
-# REFACT Пересобрать весь класс
+# REFACT Пересобрать класс
 class TB1(object):
 
     def __init__(self) -> None:
@@ -21,8 +21,9 @@ class TB1(object):
         try:
             self.__filename = filename
             self.__sheet_names = ExcelFile(self.__filename).sheet_names
+            self.__sheets = {content: self.__read_sheet(content) for content in ('Ai', 'Di')}
             # self.__sheets = {content: self.__read_sheet(content) for content in ('Ai', 'Di', 'Do')}
-            self.__sheets = {'Ai': self.__read_sheet('Ai')} # FIXME Чтение только одного листа для тестов
+            # self.__sheets = {'Ai': self.__read_sheet('Ai')} # FIXME Чтение только одного листа для тестов
 
             # TODO Придумай проверку
             return True if self.__sheets else False
@@ -41,7 +42,7 @@ class TB1(object):
         return None
 
 
-    # REFACT Алгоритм парсинга диапазонов
+    # REFACT Алгоритм парсинга диапазонов стобцов
     def __get_columns_range(self, header_rows: tuple, content_type: Literal['Ai', 'Di', 'Do']):
         conf = config.TB1[f'{content_type}']['regex']['columns']
         required_columns: dict = conf['validate']['names']
