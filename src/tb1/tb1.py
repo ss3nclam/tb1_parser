@@ -63,7 +63,6 @@ class TB1(object):
         return ','.join(chr(i + 97) for i in output_range).upper(), output_col_names
 
 
-
     def __read_sheet(self, content_type: Literal['Ai', 'Di', 'Do'], ignore_trash=True) -> DataFrame | None:
         logging.info(f'Чтение листа {content_type}..')
         try:
