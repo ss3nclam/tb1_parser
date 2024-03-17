@@ -40,14 +40,14 @@ def main():
         report = Report()
         if tb1.read(tb1_filename):
             # TODO
-            Ai_sheet = tb1.get('Ai')
+            Ai_sheet = tb1.Ai_sheet
             # Di_sheet = tb1.get('Di')
             print(Ai_sheet, end='\n\n')
             # print(Di_sheet)
-            Ai_signals = parser.get_Ai_signal_list(Ai_sheet)
+            # Ai_signals = parser.get_Ai_signal_list(Ai_sheet)
             # print(Ai_signals)
-            report_sheet = report_sheet_maker.get_empty(Ai_signals)
-            print(report_sheet)
+            # report_sheet = report_sheet_maker.get_empty(Ai_signals)
+            # print(report_sheet)
             # report.add_sheet(report_sheet)
             # report_sheet.to_excel('temp/test.xlsx', index=False)
             # print(report_sheet)

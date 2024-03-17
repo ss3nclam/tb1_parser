@@ -14,29 +14,32 @@ class TB1(object):
     def __init__(self) -> None:
         self.__filename: str
         self.__sheet_names: list[int | str]
-        self.__sheets: dict
+        # self.__sheets: dict
+        self.Ai_sheet = None
 
 
     def read(self, filename: str) -> bool:
         try:
             self.__filename = filename
             self.__sheet_names = ExcelFile(self.__filename).sheet_names
-            self.__sheets = {content: self.__read_sheet(content) for content in ('Ai', 'Di')}
+            # self.__sheets = {content: self.__read_sheet(content) for content in ('Ai', 'Di')}
             # self.__sheets = {content: self.__read_sheet(content) for content in ('Ai', 'Di', 'Do')}
             # self.__sheets = {'Ai': self.__read_sheet('Ai')} # FIXME Чтение только одного листа для тестов
+            self.Ai_sheet = self.__read_sheet('Ai')
+            print('ok')
 
             # TODO Придумай проверку
-            return True if self.__sheets else False
+            # return True if self.__sheets else False
 
         except Exception as error:
             logging.error(f'Не удалость прочитать файл - {error}')
             sys.exit(1)
 
 
-    def __search_sheet(self, names_list: list, content_type: Literal['Ai', 'Di', 'Do']) -> str | None:
+    def __search_sheet_name(self, names_list: list, sheet_content: Literal['Ai', 'Di', 'Do']) -> str | None:
         'Return name of the sheet by content type'
         for name in names_list:
-            match = re.fullmatch(config.TB1[f'{content_type}']['regex']['sheet']['validate']['name'], name)
+            match = re.fullmatch(config.TB1[f'{sheet_content}']['regex']['sheet']['validate']['name'], name)
             if match:
                 return match.string
         return None
@@ -67,10 +70,8 @@ class TB1(object):
         logging.info(f'Чтение листа {content_type}..')
         try:
             # Получение валидного названия листа
-            valid_sheet_name = self.__search_sheet(self.__sheet_names, content_type)
-
-            if not valid_sheet_name:
-                return None
+            if (valid_sheet_name := self.__search_sheet_name(self.__sheet_names, content_type)) is None:
+                return
 
             # Поиск первой строки с контентом и индексов нужных столбцов
             test_df: DataFrame = read_excel(self.__filename, valid_sheet_name, header=None, nrows=10)
@@ -83,20 +84,20 @@ class TB1(object):
 
             header_rows = list(test_df.loc[row_index].tolist() for row_index in range(start_index))
             # Чтение
-            columns = self.__get_columns_range(header_rows, content_type)
+            columns_range, columns_names = self.__get_columns_range(header_rows, content_type)
             sheet: DataFrame = read_excel(
                 self.__filename,
                 valid_sheet_name,
                 header = None,
                 skiprows = range(0, start_index),
-                usecols = columns[0]
+                usecols = columns_range
             )
             
             if not ignore_trash:
                 return sheet
             else:
                 # Переименование колонок
-                sheet = sheet.rename(columns=dict(zip(list(sheet), columns[1])))
+                sheet = sheet.rename(columns=dict(zip(list(sheet), columns_names)))
                 # Очистка листа от мусора
                 sheet = sheet.loc[sheet['name'] != 'Резерв'].dropna(axis=0, how='all').reset_index()
                 del sheet['index']
@@ -109,6 +110,6 @@ class TB1(object):
             return None
         
 
-    def get(self, content_type: Literal['Ai', 'Di', 'Do']) -> DataFrame | None:
-        "Getting sheet's dataframe from TB1"
-        return self.__sheets.get(content_type)
+    # def get(self, content_type: Literal['Ai', 'Di', 'Do']) -> DataFrame | None:
+    #     "Getting sheet's dataframe from TB1"
+    #     return self.__sheets.get(content_type)
