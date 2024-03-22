@@ -18,7 +18,7 @@ class TB1FileReader:
         self.__file: ExcelFile | None = self.__read_file()
         self.__sheet_names: list[int | str] | None = self.__file.sheet_names
 
-        self.__sheets: list | None = None
+        self.__sheets: tuple | None = None
 
 
     def __read_file(self) -> ExcelFile | None:
@@ -56,3 +56,7 @@ class TB1FileReader:
 
     def read(self):
         logging.info(f'{self.__logs_owner}: начало чтения листов..')
+
+    
+    def test(self):
+        return self.__file
