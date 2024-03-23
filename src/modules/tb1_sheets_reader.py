@@ -16,6 +16,11 @@ class TB1SheetsReader:
     
 
     def __find_sheet_name(self, content_type: str) -> str | None:
+        '''
+        Приватный метод для поиска названия конкретного листа ТБ1.\n
+        На входе принимает тип содержимого листа, если в либе с регулярками прописаны все его настройки.\n
+        Примеры инпута: 'Ai', 'Di', 'Do'
+        '''
         logging.info(f'{self.__logs_owner}: поиск листа "{content_type}"..')
         matches: list[str] = []
         try:
@@ -37,13 +42,20 @@ class TB1SheetsReader:
             return
     
 
-    def __find_sheet_columns(self, content_type: str, df_header: list[list]) -> dict[str:int]: # REFACT Переписать функцию поиска колонок
+    def __find_sheet_columns(self, content_type: str, df_header: list[list]) -> dict[str:int]: # REFACT Переписать метод поиска колонок
+        '''
+        Приватный метод для поиска индексов колонок конкреного листа ТБ1, перечисленных в либе регулярок.\n
+        На входе тип содержимого листа и датафрейм из его шапки с названиями колонок.\n
+        На выходе словарь с нормальизованными названиями колонок и их индексы.
+        '''
+
         # TODO Логи
         # TODO Исключения
 
         columns_config = config[f'{content_type}']['regex']['columns']
         required_columns: dict = columns_config['validate']['names']
         replace_config = columns_config['replace']['trash']
+
         out: dict = {requared_column:None for requared_column in list(required_columns)}
 
         # Для каждой строки в массиве на входе
@@ -63,7 +75,7 @@ class TB1SheetsReader:
         return out
 
     
-    def read_sheet(self, content_type: str):
+    def read_sheet(self, content_type: str): # REFACT Переписать метод чтения листов
         # TODO Логи
         # TODO Исключения
 
@@ -78,9 +90,9 @@ class TB1SheetsReader:
 
         # Поиск первой строки с контентом и индексов нужных столбцов
         first_col_content: list = test_df.iloc[:, 0].tolist()
-        for i, row in enumerate(first_col_content):
+        for index, row in enumerate(first_col_content):
             if content_type.upper() in str(row):
-                start_index: int = i
+                start_index: int = index
                 break
         print(start_index)
         header_rows = list(test_df.loc[row_index].tolist() for row_index in range(start_index))
