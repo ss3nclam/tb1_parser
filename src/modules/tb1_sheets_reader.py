@@ -58,16 +58,16 @@ class TB1SheetsReader:
 
         out: dict = {requared_column:None for requared_column in list(required_columns)}
 
-        # Для каждой строки в массиве на входе
+        # Для строки в массиве из инпута
         for row in df_header:
-            # Для каждой ячейки в строке
+            # Для ячейки в строке
             for cell_index, cell_value in enumerate(row):
-                if not isinstance(cell_value, str): continue # если содержимое ячейки не является строкой
+                if not isinstance(cell_value, str): continue
                 
                 # Очистка содержимого ячейки от мусора
                 clear_cell_value = re.sub(replace_config['pattern'], replace_config['new_value'], cell_value)
                 
-                # Для необходимых колонок и регулярок к ним
+                # Для колонок из либы регулярок
                 for requared_column, pattern in required_columns.items():
                     if re.fullmatch(pattern, clear_cell_value):
                         if out[requared_column] is None:
@@ -86,7 +86,7 @@ class TB1SheetsReader:
         
         # Создание тестового фрейма
         test_df: DataFrame = read_excel(self.__file, sheet_name, header=None, nrows=10)
-        print(test_df)
+        # print(test_df)
 
         # Поиск первой строки с контентом и индексов нужных столбцов
         first_col_content: list = test_df.iloc[:, 0].tolist()
@@ -94,6 +94,6 @@ class TB1SheetsReader:
             if content_type.upper() in str(row):
                 start_index: int = index
                 break
-        print(start_index)
+        # print(start_index)
         header_rows = list(test_df.loc[row_index].tolist() for row_index in range(start_index))
         print(self.__find_sheet_columns(content_type, header_rows))
