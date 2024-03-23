@@ -39,7 +39,6 @@
 #         report_sheet_maker = ReportSheetMaker()
 #         report = Report()
 #         if tb1.read(tb1_filename):
-#             # TODO
 #             tb_sheet = tb1.get('Ai')
 #             signals = parser.get_Ai_signal_list(tb_sheet)
 #             report_sheet = report_sheet_maker.get_empty(signals)

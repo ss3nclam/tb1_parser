@@ -1,13 +1,10 @@
 import logging
-import re
 import sys
-from typing import Literal
 
 from pandas import ExcelFile
 
-from config import TB1 as config
+from src.modules.regex_lib import TB1
 from src.modules.tb1_sheets_reader import TB1SheetsReader
-from src.modules.types.tb1_sheets import TB1AiSheet, TB1DiSheet, TB1DoSheet
 
 
 class TB1FileReader:
@@ -32,13 +29,10 @@ class TB1FileReader:
 
     def read(self):
         logging.info(f'{self.__logs_owner}: начало чтения ТБ1..')
-        sheet_reader = TB1SheetsReader(self.__read_file())
-        sheet_reader.test()
+        sheets_reader = TB1SheetsReader(self.__read_file())
+        sheets_reader.read_sheet('Ai')
 
-
-
-
-
-
-    # def test(self):
-    #     print(self.__sheet_names)
+        # requared_sheets = list(TB1)
+        # if sheets_reader.read():
+        #     for sheet_type in requared_sheets:
+        #         self.__sheets[sheet_type] = sheets_reader.get(sheet_type)
