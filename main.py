@@ -55,3 +55,33 @@
 
 # if __name__ == "__main__":
 #     main()
+
+
+import pandas
+import logging
+
+from src.modules.tb1_file_reader import TB1FileReader
+from src.modules.tb1_parser import TB1Parser
+
+
+# Настройка логера
+# logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.ERROR)
+
+# Настройка полного вывода таблицы
+pandas.set_option("display.max_rows", None)
+# pandas.set_option("display.max_rows", 20)
+pandas.set_option('display.max_colwidth', None)
+
+
+# 'temp/table.xls',
+# 'temp/table.xlsx'
+
+tb1 = TB1FileReader(filepath='temp/table.xlsx')
+tb1.read('Ai')
+# print(TB1.sheets['Ai'])
+parser = TB1Parser()
+signals = parser.get_Ai_signal_list(tb1.sheets['Ai'])
+
+for i in signals:
+    print(i)
