@@ -1,15 +1,15 @@
-import asyncio
 import logging
 import sys
 from typing import Any, Literal
 
-from pandas import DataFrame, ExcelFile
+from pandas import ExcelFile
 
 from src.modules.regex_lib import TB1 as config
 from src.modules.tb1_sheet_reader import TB1SheetReader
 
 
 all_avaible_sheets = list(config)
+
 
 class TB1FileReader:
 

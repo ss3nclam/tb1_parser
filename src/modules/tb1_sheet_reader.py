@@ -1,6 +1,5 @@
 import logging
 import re
-from typing import Iterable, Literal
 
 from pandas import DataFrame, ExcelFile, read_excel
 
@@ -11,9 +10,7 @@ class TB1SheetReader:
 
     def __init__(self, file: ExcelFile) -> None:
         self.__logs_owner: str = self.__class__.__name__
-
         self.__file = file
-        # self.sheets: dict = {}
     
 
     def __find_sheet_name(self, content_type: str) -> str | None:
@@ -43,10 +40,10 @@ class TB1SheetReader:
             return
     
 
-    def __find_sheet_columns(self, content_type: str, df_header: list[list]) -> dict[str:int]: # REFACT Переписать метод поиска столбцов
+    def __find_sheet_columns(self, content_type: str, dataframe_head: list[list]) -> dict[str:int]: # REFACT Переписать метод поиска столбцов
         '''
         Приватный метод для поиска индексов колонок конкреного листа ТБ1, перечисленных в либе регулярок.\n
-        На входе тип содержимого листа и датафрейм из его шапки с названиями колонок.\n
+        На входе тип содержимого листа и датафрейм из его шапки с названиями колонок.
         На выходе словарь с нормальизованными названиями колонок и их индексы.
         '''
 
@@ -65,7 +62,7 @@ class TB1SheetReader:
                 already_found_indexes = tuple(index for index in out.values() if index is not None)
 
                 # Для строки в массиве из инпута
-                for row in df_header:
+                for row in dataframe_head:
 
                     # Для ячейки в строке
                     for cell_index, cell_value in enumerate(row):
@@ -91,23 +88,26 @@ class TB1SheetReader:
 
     
     def __read_sheet(self, content_type: str) -> None | DataFrame: # REFACT Переписать метод чтения листов
+        '''
+        Приватный метод для чтения конкретного листа ТБ1.
+        Анализириует и нормальизует шапку, считывает только те столбцы, что указаны в либе регулярок.\n
+        На входе указывается только тип искомого наполнения.
+        На выходе датафрейм, с которым можно стандартно работать при помощи pandas.
+        '''
         # TODO Логи
         # TODO Исключения
 
+        # TODO Перенести в метод валидации FileReader'а
         if not isinstance(content_type, str):
             raise TypeError(f'{type(content_type)} не является допустимым типом данных для "content_type"')
-        
         if content_type not in list(config):
             raise ValueError(f'нет подходящего шаблона для "{content_type}" типа листов ТБ1')
         
-        sheet_name = self.__find_sheet_name(content_type)
-
-        if not sheet_name:
-            return
+        sheet_name: str | None = self.__find_sheet_name(content_type)
+        if not sheet_name: return
         
         # Создание тестового фрейма
         test_df: DataFrame = read_excel(self.__file, sheet_name, header=None, nrows=10)
-        # print(test_df)
 
         # Поиск первой строки с контентом
         first_col_content: list = test_df.iloc[:, 0].tolist()
@@ -115,26 +115,17 @@ class TB1SheetReader:
             if content_type.upper() in str(row):
                 start_index: int = index
                 break
-        # print(start_index)
 
-        # Анализ шапки тестового датафрейма
-        header_rows = list(test_df.loc[row_index].tolist() for row_index in range(start_index))
-
-        # Поиск столбцов, прописанных в либе ргулярок + их индексы
-        columns: dict = self.__find_sheet_columns(content_type, header_rows)
-        # print(columns)
+        # Анализ шапки тестового датафрейма. Поиск столбцов, прописанных в либе ргулярок + их индексы
+        columns: dict = self.__find_sheet_columns(
+            content_type,
+            list(test_df.loc[row_index].tolist() for row_index in range(start_index))
+            )
 
         # Фильтрация только обнаруженных в ТБ1 столбцов (для предотвращения глюка с чтением содержимого столбцов)
         existing_columns: dict = {key:value for key, value in columns.items() if value is not None}
-        # print(existing_columns)
-
         # Сортировка по индексу
         existing_columns = dict(sorted(existing_columns.items(), key=lambda item: item[1]))
-        # print(existing_columns)
-
-        # Получение буквенного диапазона столбцов для чтения листа
-        column_range: str = ','.join(chr(i + 97) for i in existing_columns.values()).upper()
-        # print(column_range)
 
         # Чтение листа
         sheet: DataFrame = read_excel(
@@ -142,13 +133,11 @@ class TB1SheetReader:
             sheet_name,
             header = None,
             skiprows = range(0, start_index),
-            usecols = column_range
+            usecols = ','.join(chr(i + 97) for i in existing_columns.values()).upper()
         ).ffill().drop_duplicates()
         
-        # Переименование колонок
+        # Переименование столбцов и очистка датафрейма от мусора
         sheet = sheet.rename(columns=dict(zip(list(sheet), existing_columns)))
-
-        # Очистка листа от мусора
         sheet = sheet.loc[sheet['name'] != 'Резерв'].dropna(axis=0, how='all').reset_index()
         del sheet['index']
 
