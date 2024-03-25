@@ -2,10 +2,11 @@ import logging
 import sys
 from typing import Any, Literal
 
-from pandas import ExcelFile
+from pandas import DataFrame, ExcelFile
 
 from src.modules.regex_lib import TB1 as config
 from src.modules.tb1_sheet_reader import TB1SheetReader
+from src.modules.types.tb1_sheets_dict import TB1SheetsDict
 
 
 all_avaible_sheets = list(config)
@@ -17,7 +18,7 @@ class TB1FileReader:
         self.__logs_owner: str = self.__class__.__name__
         self.__filepath = filepath
 
-        self.sheets: dict = {}
+        self.sheets: TB1SheetsDict[str, DataFrame] = {}
 
 
     def __read_file(self) -> ExcelFile:
@@ -50,5 +51,5 @@ class TB1FileReader:
             self.sheets[sheets] = sheet_reader.get(sheets)
 
 
-    def get(self, sheet_type: str):
-        return self.sheets.get(sheet_type)
+    def get(self, sheet: Literal['Ai', 'Di', 'Do']):
+        return self.sheets.get(sheet)

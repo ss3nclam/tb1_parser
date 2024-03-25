@@ -14,6 +14,10 @@ from src.modules.types.signals import AiSignal
 #REFACT Пересобрать весь класс
 class TB1Parser:
 
+    def __init__(self) -> None:
+        self.__logs_owner: str = self.__class__.__name__
+    
+
     def __parse_raw_Ai_range(self, raw_range: str, range_info: str='измерения') -> list[str]:
         start = end = None
         try:
@@ -67,15 +71,22 @@ class TB1Parser:
         out = []
 
         for row in sheet.itertuples(False, 'Signal'):
-            logging.info(f'Парсер: получение значений для "{row.name}"')
+            logging.info(f'{self.__logs_owner}: парсинг значений для "{row.name}"')
+
             new = AiSignal()
             new.variable = row.variable
             new.name = row.name
-            new.unit = row.unit
-            new.LL, new.HL = self.__parse_raw_Ai_range(row.range)
-            new.LW, new.HW = self.__parse_raw_Ai_range(row.warning_range)
-            new.LA, new.HA = self.__parse_raw_Ai_range(row.alarm_range)
-            new.plc_module = row.plc_module.replace('\n', ' ') # REFACT
-            out.append(new)
 
+            try:
+                new.unit = row.unit
+                new.LL, new.HL = self.__parse_raw_Ai_range(row.range)
+                new.LW, new.HW = self.__parse_raw_Ai_range(row.warning_range)
+                new.LA, new.HA = self.__parse_raw_Ai_range(row.alarm_range)
+                new.LE, new.HE = self.__parse_raw_Ai_range(row.error_range)
+                new.plc_module = row.plc_module.replace('\n', ' ') # REFACT
+
+                out.append(new)
+            except Exception as error:
+                logging.error(f'{self.__logs_owner}: ошибка парсинга "{row.name}" - {error}')
+                out.append(new)
         return out

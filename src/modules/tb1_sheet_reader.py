@@ -58,7 +58,7 @@ class TB1SheetReader:
         # Для столбцов из либы регулярок
         try:
             for requared_column, pattern in required_columns.items():
-                logging.info(f'{self.__logs_owner}:{content_type}: поиск столбца "{requared_column}"..')
+                # logging.info(f'{self.__logs_owner}:{content_type}: поиск столбца "{requared_column}"..')
                 already_found_indexes = tuple(index for index in out.values() if index is not None)
 
                 # Для строки в массиве из инпута

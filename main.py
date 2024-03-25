@@ -62,11 +62,13 @@ import logging
 
 from src.modules.tb1_file_reader import TB1FileReader
 from src.modules.tb1_parser import TB1Parser
+from src.modules.types.signals import AiSignal
+from src.modules.types.tb1_sheets_dict import TB1SheetsDict
 
 
 # Настройка логера
-# logging.basicConfig(level=logging.DEBUG)
-logging.basicConfig(level=logging.ERROR)
+logging.basicConfig(level=logging.DEBUG)
+# logging.basicConfig(level=logging.ERROR)
 
 # Настройка полного вывода таблицы
 pandas.set_option("display.max_rows", None)
@@ -76,12 +78,21 @@ pandas.set_option('display.max_colwidth', None)
 
 # 'temp/table.xls',
 # 'temp/table.xlsx'
+# temp\ЛДАР.421245.751_ТБ1.xlsx
 
-tb1 = TB1FileReader(filepath='temp/table.xlsx')
-tb1.read('Ai')
-# print(TB1.sheets['Ai'])
+# tb1 = TB1FileReader(filepath='temp/table.xls')
+# tb1 = TB1FileReader(filepath='temp/ЛДАР.421245.751_ТБ1.xlsx')
+reader = TB1FileReader(filepath='temp/ЛДАР.421245.754 ТБ1.xlsx')
+reader.read()
+
+tb1: TB1SheetsDict = reader.sheets
+
+for key, value in tb1.items():
+    print(value, '\n')
+
 parser = TB1Parser()
-signals = parser.get_Ai_signal_list(tb1.sheets['Ai'])
+signals: list = parser.get_Ai_signal_list(tb1['Ai'])
 
 for i in signals:
+    i: AiSignal
     print(i)
