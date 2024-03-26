@@ -7,11 +7,12 @@ class Signal(object):
     def __init__(self) -> None:
         self.variable: None | str
         self.name: None | str
+        self.formated_name: None | str
         self.plc_module: None | str
 
 
     def __repr__(self) -> str:
-        return f'Var: {self.variable}, Name: {self.name}, PLC_module: {self.plc_module}'
+        return f'Var: {self.variable}, Name: {self.name}, Formated_name: {self.formated_name}, PLC_module: {self.plc_module}'
 
 
 @dataclass

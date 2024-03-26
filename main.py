@@ -83,7 +83,7 @@ pandas.set_option('display.max_colwidth', None)
 # tb1 = TB1FileReader(filepath='temp/table.xls')
 # tb1 = TB1FileReader(filepath='temp/ЛДАР.421245.751_ТБ1.xlsx')
 reader = TB1FileReader(filepath='temp/ЛДАР.421245.754 ТБ1.xlsx')
-reader.read()
+reader.read('Ai')
 
 tb1: TB1SheetsDict = reader.sheets
 
@@ -91,8 +91,20 @@ for key, value in tb1.items():
     print(value, '\n')
 
 parser = TB1Parser()
-signals: list = parser.get_Ai_signal_list(tb1['Ai'])
+Ai_signals: list = parser.get_Ai_signal_list(tb1['Ai'])
 
-for i in signals:
-    i: AiSignal
-    print(i)
+
+
+with open('temp/proc_AI.st', 'a') as proc_AI:
+    proc_AI.write('FUNCTION_BLOCK proc_AI\n')
+
+    proc_AI.write('\nVAR\n')
+    for signal in Ai_signals:
+        signal: AiSignal
+        proc_AI.write(f'\tfb_{signal.formated_name} : fb_AiSourceMlp;\n')
+    proc_AI.write('END_VAR\n')
+
+    proc_AI.write('\nVAR_EXTERNAL\n')
+    proc_AI.write('\tai : AiConfig;\n\tisSignalsChanged : BOOL;\n')
+    for var in (signal.variable for signal in Ai_signals):
+        proc_AI.write(f'\tar{var.replace('AI', 'AIN_')} : TItemAIN;\n')
