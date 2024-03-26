@@ -57,54 +57,47 @@
 #     main()
 
 
-import pandas
 import logging
 
-from src.modules.tb1_file_reader import TB1FileReader
-from src.modules.tb1_parser import TB1Parser
-from src.modules.types.signals import AiSignal
+import pandas
+
+from src.modules.tb1_parser.parser import TB1Parser
+from src.modules.tb1_reader.file_reader import TB1FileReader
 from src.modules.types.tb1_sheets_dict import TB1SheetsDict
 
 
 # Настройка логера
 logging.basicConfig(level=logging.DEBUG)
-# logging.basicConfig(level=logging.ERROR)
 
 # Настройка полного вывода таблицы
 pandas.set_option("display.max_rows", None)
-# pandas.set_option("display.max_rows", 20)
 pandas.set_option('display.max_colwidth', None)
 
-
-# 'temp/table.xls',
-# 'temp/table.xlsx'
-# temp\ЛДАР.421245.751_ТБ1.xlsx
-
-# tb1 = TB1FileReader(filepath='temp/table.xls')
-# tb1 = TB1FileReader(filepath='temp/ЛДАР.421245.751_ТБ1.xlsx')
-reader = TB1FileReader(filepath='temp/ЛДАР.421245.754 ТБ1.xlsx')
-reader.read('Ai')
-
+reader = TB1FileReader(filepath='temp/table.xls')
+# reader = TB1FileReader(filepath='temp/table.xlsx')
+# reader = TB1FileReader(filepath='temp/ЛДАР.421245.751_ТБ1.xlsx')
+# reader = TB1FileReader(filepath='temp/ЛДАР.421245.754 ТБ1.xlsx')
+reader.read()
 tb1: TB1SheetsDict = reader.sheets
 
-for key, value in tb1.items():
-    print(value, '\n')
 
-parser = TB1Parser()
-Ai_signals: list = parser.get_Ai_signal_list(tb1['Ai'])
-
+parser = TB1Parser(tb1)
+parser.start()
+print(parser.get_result()['Ai'])
 
 
-with open('temp/proc_AI.st', 'a') as proc_AI:
-    proc_AI.write('FUNCTION_BLOCK proc_AI\n')
 
-    proc_AI.write('\nVAR\n')
-    for signal in Ai_signals:
-        signal: AiSignal
-        proc_AI.write(f'\tfb_{signal.formated_name} : fb_AiSourceMlp;\n')
-    proc_AI.write('END_VAR\n')
 
-    proc_AI.write('\nVAR_EXTERNAL\n')
-    proc_AI.write('\tai : AiConfig;\n\tisSignalsChanged : BOOL;\n')
-    for var in (signal.variable for signal in Ai_signals):
-        proc_AI.write(f'\tar{var.replace('AI', 'AIN_')} : TItemAIN;\n')
+# with open('temp/proc_AI.st', 'a') as proc_AI:
+#     proc_AI.write('FUNCTION_BLOCK proc_AI\n')
+
+#     proc_AI.write('\nVAR\n')
+#     for signal in Ai_signals:
+#         signal: AiSignal
+#         proc_AI.write(f'\tfb_{signal.formated_name} : fb_AiSourceMlp;\n')
+#     proc_AI.write('END_VAR\n')
+
+#     proc_AI.write('\nVAR_EXTERNAL\n')
+#     proc_AI.write('\tai : AiConfig;\n\tisSignalsChanged : BOOL;\n')
+#     for var in (signal.variable for signal in Ai_signals):
+#         proc_AI.write(f'\tar{var.replace('AI', 'AIN_')} : TItemAIN;\n')

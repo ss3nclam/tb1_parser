@@ -5,7 +5,7 @@ from typing import Any, Literal
 from pandas import DataFrame, ExcelFile
 
 from src.modules.regex_lib import TB1 as config
-from src.modules.tb1_sheet_reader import TB1SheetReader
+from src.modules.tb1_reader.sheet_reader import TB1SheetReader
 from src.modules.types.tb1_sheets_dict import TB1SheetsDict
 
 
