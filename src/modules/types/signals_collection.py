@@ -1,0 +1,2 @@
+class SignalsCollection(dict):
+    pass

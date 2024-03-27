@@ -6,7 +6,7 @@ from pandas import DataFrame, ExcelFile
 
 from src.modules.regex_lib import TB1 as config
 from src.modules.tb1_reader.sheet_reader import TB1SheetReader
-from src.modules.types.tb1_sheets_dict import TB1SheetsDict
+from src.modules.types.tb1_readed_sheets import TB1ReadedSheets
 
 
 all_avaible_sheets = list(config)
@@ -18,7 +18,7 @@ class TB1FileReader:
         self.__logs_owner: str = self.__class__.__name__
         self.__filepath = filepath
 
-        self.sheets: TB1SheetsDict[str, DataFrame] = {}
+        self.sheets: TB1ReadedSheets[str, DataFrame] = {}
 
 
     def __read_file(self) -> ExcelFile:

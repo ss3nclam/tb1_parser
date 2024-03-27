@@ -5,7 +5,8 @@ from pandas import DataFrame
 from transliterate import translit
 
 from src.modules.regex_lib import TB1 as config
-from src.modules.types.signals import AiSignal
+from src.modules.types.Ai_list import AiList
+from src.modules.types.Ai_signal import AiSignal
 
 
 class AiSheetParser:
@@ -145,7 +146,7 @@ class AiSheetParser:
             return out
 
     
-    def start(self) -> tuple:
+    def start(self) -> None:
         if not list(config['Ai']['regex']['columns']['validate']['names'].keys()) == list(self.__sheet):
             logging.error(f'{self.__logs_owner}: передан неверный лист аналоговых сигналов')
 
@@ -171,10 +172,10 @@ class AiSheetParser:
             except Exception as error:
                 logging.error(f'{self.__logs_owner}: ошибка парсинга "{row.name}" - {error}')
                 out.append(new)
-        self.__result = tuple(out)
+        self.__result = AiList(out)
 
 
-    def get_result(self) -> tuple | None:
+    def get_result(self) -> AiList | None:
         if out := self.__result:
             return out
         else:

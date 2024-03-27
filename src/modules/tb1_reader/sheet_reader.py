@@ -138,8 +138,8 @@ class TB1SheetReader:
         
         # Переименование столбцов и очистка датафрейма от мусора
         sheet = sheet.rename(columns=dict(zip(list(sheet), existing_columns)))
-        # sheet = sheet.loc[sheet['name'] != 'Резерв'].dropna(axis=0, how='all').reset_index()
-        sheet = sheet.dropna(axis=0, how='all').reset_index()
+        # sheet = sheet.loc[sheet['name'] != 'Резерв'].dropna(axis=0, how='all').reset_index() # Читать без резервов
+        sheet = sheet.dropna(axis=0, how='all').reset_index() # С резервами
         del sheet['index']
 
         # Добавление в датафрейм столбцов, которые есть в либе регулярок, но нет в ТБ1

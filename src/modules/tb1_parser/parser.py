@@ -1,16 +1,17 @@
 import logging
 
 from src.modules.tb1_parser.ai_sheet_parser import AiSheetParser
-from src.modules.types.tb1_sheets_dict import TB1SheetsDict
+from src.modules.types.signals_collection import SignalsCollection
+from src.modules.types.tb1_readed_sheets import TB1ReadedSheets
 
 
 class TB1Parser:
 
-    def __init__(self, sheets_dict: TB1SheetsDict) -> None:
+    def __init__(self, readed_sheets_obj: TB1ReadedSheets) -> None:
         self.__logs_owner: str = self.__class__.__name__
 
-        self.__sheets_dict = sheets_dict
-        self.__result: dict = {}
+        self.__sheets_dict = readed_sheets_obj
+        self.__result: SignalsCollection = {}
     
 
     def start(self):
@@ -29,7 +30,7 @@ class TB1Parser:
             pass # TODO Написать обработку исключений
     
 
-    def get_result(self):
+    def get_result(self) -> SignalsCollection:
         if out := self.__result:
             return out
         else:

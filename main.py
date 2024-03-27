@@ -63,8 +63,8 @@ import pandas
 
 from src.modules.tb1_parser.parser import TB1Parser
 from src.modules.tb1_reader.file_reader import TB1FileReader
-from src.modules.types.signals import AiSignal
-from src.modules.types.tb1_sheets_dict import TB1SheetsDict
+from src.modules.types.Ai_signal import AiSignal
+from src.modules.types.tb1_readed_sheets import TB1ReadedSheets
 
 
 # Настройка логера
@@ -74,12 +74,12 @@ logging.basicConfig(level=logging.DEBUG)
 pandas.set_option("display.max_rows", None)
 pandas.set_option('display.max_colwidth', None)
 
-# reader = TB1FileReader(filepath='temp/table.xls')
+reader = TB1FileReader(filepath='temp/table.xls')
 # reader = TB1FileReader(filepath='temp/table.xlsx')
-reader = TB1FileReader(filepath='temp/ЛДАР.421245.751_ТБ1.xlsx')
+# reader = TB1FileReader(filepath='temp/ЛДАР.421245.751_ТБ1.xlsx')
 # reader = TB1FileReader(filepath='temp/ЛДАР.421245.754 ТБ1.xlsx')
 reader.read('Ai')
-tb1: TB1SheetsDict = reader.sheets
+tb1: TB1ReadedSheets = reader.sheets
 
 
 parser = TB1Parser(tb1)

@@ -1,0 +1,2 @@
+class AiList(tuple):
+    pass
