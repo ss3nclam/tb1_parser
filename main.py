@@ -63,6 +63,7 @@ import pandas
 
 from src.modules.tb1_parser.parser import TB1Parser
 from src.modules.tb1_reader.file_reader import TB1FileReader
+from src.modules.types.signals import AiSignal
 from src.modules.types.tb1_sheets_dict import TB1SheetsDict
 
 
@@ -73,19 +74,24 @@ logging.basicConfig(level=logging.DEBUG)
 pandas.set_option("display.max_rows", None)
 pandas.set_option('display.max_colwidth', None)
 
-reader = TB1FileReader(filepath='temp/table.xls')
+# reader = TB1FileReader(filepath='temp/table.xls')
 # reader = TB1FileReader(filepath='temp/table.xlsx')
-# reader = TB1FileReader(filepath='temp/ЛДАР.421245.751_ТБ1.xlsx')
+reader = TB1FileReader(filepath='temp/ЛДАР.421245.751_ТБ1.xlsx')
 # reader = TB1FileReader(filepath='temp/ЛДАР.421245.754 ТБ1.xlsx')
-reader.read()
+reader.read('Ai')
 tb1: TB1SheetsDict = reader.sheets
 
 
 parser = TB1Parser(tb1)
 parser.start()
-print(parser.get_result()['Ai'])
+parse_res = parser.get_result()['Ai']
 
+for i in parse_res:
+    i: AiSignal
+# 
+    print(i)
 
+# print(set(i.plc_module for i in parse_res))
 
 
 # with open('temp/proc_AI.st', 'a') as proc_AI:

@@ -12,7 +12,7 @@ class Signal(object):
 
 
     def __repr__(self) -> str:
-        return f'Var: {self.variable}, Name: {self.name}, Formated_name: {self.formated_name}, PLC_module: {self.plc_module}'
+        return f'Var: {self.variable},\nName: {self.name},\nFormated_name: {self.formated_name},\nPLC_module: {self.plc_module}'
 
 
 @dataclass
@@ -32,4 +32,4 @@ class AiSignal(Signal):
     
 
     def __repr__(self) -> str:
-        return super().__repr__() + f', Unit: {self.unit}, LL: {self.LL}, LA: {self.LA}, LW: {self.LW}, HW: {self.HW}, HA: {self.HA}, HL: {self.HL}, LE: {self.LE}, HE: {self.HE}'
+        return super().__repr__() + f',\nUnit: {self.unit},\nLL: {self.LL},\nLA: {self.LA},\nLW: {self.LW},\nHW: {self.HW},\nHA: {self.HA},\nHL: {self.HL},\nLE: {self.LE},\nHE: {self.HE}\n'
