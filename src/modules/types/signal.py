@@ -12,4 +12,4 @@ class Signal(object):
 
 
     def __repr__(self) -> str:
-        return f'Var: {self.variable},\nName: {self.name},\nFormated_name: {self.formated_name},\nPLC_module: {self.plc_module}'
+        return f'var: {self.variable}, name: {self.formated_name}, module: {self.plc_module}'

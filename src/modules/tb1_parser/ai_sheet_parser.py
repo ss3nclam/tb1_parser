@@ -5,8 +5,8 @@ from pandas import DataFrame
 from transliterate import translit
 
 from src.modules.regex_lib import TB1 as config
-from src.modules.types.Ai_list import AiList
 from src.modules.types.Ai_signal import AiSignal
+from src.modules.types.Ai_signals_collection import AiSignalsCollection
 
 
 class AiSheetParser:
@@ -18,12 +18,36 @@ class AiSheetParser:
         self.__result = None
 
 
-    # TODO Написать метод для парсинга переменной сигнала
-    def __parse_variable(self, raw_variable: str) -> int:
+    # REFACT Отрефакторить метод поиска количества каналов для модуля
+    def __find_count_plc_channels(self, raw_plc_module: str):
         try:
-            out = int(re.sub(r'\D+', '', raw_variable))
-        except Exception as error:
-            logging.error(f'{self.__logs_owner}: ошибка парсинга "{raw_variable}" переменной - {error}')
+            sheet: DataFrame = self.__sheet
+            count: int = len(sheet[sheet['plc_module'] == raw_plc_module])
+            return count
+        except Exception as exception:
+            pass
+        finally:
+            pass
+
+
+    # TODO Написать метод для парсинга переменной сигнала
+    def __parse_variable(self, raw_variable: str, raw_plc_module: str) -> int:
+        clean_input = lambda x: re.sub(r'^\D{2}', '', x)
+        clear_variable = clean_input(raw_variable)
+        try:
+            out = int(clear_variable)
+        except ValueError as value_error:
+            logging.warning(f'{self.__logs_owner}: некорректный номер переменной "{raw_variable}"')
+            count_plc_channels = self.__find_count_plc_channels(raw_plc_module)
+            nums = tuple(map(int, clear_variable.split('-')))
+            if len(nums) == 2:
+                logging.info(f'{self.__logs_owner}: вычисление порядкового номера "{raw_variable}"')
+                out = count_plc_channels * nums[0] + nums[1]
+                logging.warning(f'{self.__logs_owner}: номер переменной "{raw_variable}" принудительно нормализован - "{out}"')
+            else:
+                raise ValueError('попытка вычисления порядкового номера переменной провалена')
+        except Exception as exception:
+            logging.error(f'{self.__logs_owner}: ошибка парсинга "{raw_variable}" переменной - {type(exception).__name__}:{exception}')
             out = None
         finally:
             return out
@@ -68,7 +92,7 @@ class AiSheetParser:
     # REFACT Переписать метод парсинга канала модуля плк
     def __parse_plc_module(self, raw_string: str) -> str:
         try:
-            out = re.findall(r'^\w{2}\-[a-z0-9]+\,?\s?\(?(\w(\d+).?(\d+))\)?', raw_string)[0][1:]
+            out = re.findall(r'^\w{2}\-[a-z0-9]+\,?\s?\(?(\w(\d+).?(\d+))\)?', raw_string)[0][1:] # REFACT Перенести регулярку для модуля плк в либу
             out = tuple(map(int, out))
             if not out:
                 raise ValueError('ошибка сопоставления с шаблоном')
@@ -81,21 +105,22 @@ class AiSheetParser:
 
     # REFACT Переписать метод парсинга единицы измерения из диапазона
     def __find_unit(self, range: str) -> str:
+        out = None
         try:
-            out = range.split(' ')[-1]
+            if (unit := range.split(' ')[-1]) and unit != 'нет':
+                out = unit
         except Exception as error:
             logging.error(f'{self.__logs_owner}: ошибка поиска единицы измерения в "{range}" диапазоне измерения - {error}')
-            out = None
         finally:
             return out
 
 
     # REFACT Отрефакторить метод парсинга диапазонов
-    def __parse_range(self, raw_range: str) -> list[str]:
+    def __parse_range(self, raw_range: str | None) -> list:
         start = end = None
         try:
             # Отсев пустого диапазона
-            if re.fullmatch(config['Ai']['regex']['content']['validate']['empty_range'], raw_range):
+            if raw_range is None or re.fullmatch(config['Ai']['regex']['content']['validate']['empty_range'], raw_range):
                 return start, end
             
             else:
@@ -130,20 +155,22 @@ class AiSheetParser:
                     else:
                         raise ValueError('некорректное число совпадений с шаблоном')
 
-                # Финальное форматирование диапазона
-        except Exception as error:
-            # logging.error(f'Парсер: ошибка получения диапазона из "{raw_range}"')
-            # start = end = 'parse_error' # FIXME Написать исключение для финального форматирования
-            pass
-        
-        # TODO Написать проверку ошибочного заполнения ТБ
-        finally:
-            final_format = lambda x: float(x.replace(',', '.')) if isinstance(x, str) else x
-            rng = (start, end)
-            # rng = rng if None in rng else sorted(rng) # FIXME Сортировка спарсенных значений диапазона
-            out = [final_format(i) for i in rng]
-            # logging.info(f'Парсер: выходной диапазон - {out}')
-            return out
+                # Финальное форматирование - конвертация в float
+                format_func = \
+                    lambda x: float(x.replace(',', '.')) if isinstance(x, str) else x
+                out = [format_func(i) for i in (start, end)]
+
+                # Если стартовое значение больше конечного
+                if len(out) == 2 and None not in out:
+                    if out[0] > out[1]:
+                        logging.warning(f'{self.__logs_owner}: предупреждение при получении диапазона из "{raw_range}" - некорректно заполнено в ТБ1')
+                        out = sorted(out)
+                        logging.warning(f'{self.__logs_owner}: диапазон "{raw_range}" принудительно нормализован - {tuple(out)}')
+                return out
+
+        except Exception as exception:
+            logging.error(f'{self.__logs_owner}: ошибка получения диапазона из "{raw_range}" - {exception}')
+            return [*['parse_error']*2]
 
     
     def start(self) -> None:
@@ -153,15 +180,15 @@ class AiSheetParser:
         out = []
 
         for row in self.__sheet.itertuples(False, 'Signal'):
-            logging.info(f'{self.__logs_owner}: парсинг значений для "{row.name}"')
-
-            new = AiSignal()
-            new.variable = self.__parse_variable(row.variable)
-            new.name = row.name
+            # logging.info(f'{self.__logs_owner}:{row.variable}: парсинг..')
 
             try:
-                new.formated_name = self.__format_signal_name(row.name)
+                new = AiSignal()
                 new.plc_module = self.__parse_plc_module(row.plc_module)
+                new.variable = self.__parse_variable(row.variable, row.plc_module)
+                
+                new.name = row.name
+                new.formated_name = self.__format_signal_name(row.name)
                 new.unit = row.unit if row.unit else self.__find_unit(row.range)
                 new.LL, new.HL = self.__parse_range(row.range)
                 new.LW, new.HW = self.__parse_range(row.warning_range)
@@ -169,13 +196,14 @@ class AiSheetParser:
                 new.LE, new.HE = self.__parse_range(row.error_range)
 
                 out.append(new)
+                logging.info(f'{self.__logs_owner}:{row.variable}: значения успешно получены')
             except Exception as error:
-                logging.error(f'{self.__logs_owner}: ошибка парсинга "{row.name}" - {error}')
+                logging.error(f'{self.__logs_owner}:{row.variable}: ошибка парсинга - {error}')
                 out.append(new)
-        self.__result = AiList(out)
+        self.__result = AiSignalsCollection(out)
 
 
-    def get_result(self) -> AiList | None:
+    def get_result(self) -> AiSignalsCollection | None:
         if out := self.__result:
             return out
         else:

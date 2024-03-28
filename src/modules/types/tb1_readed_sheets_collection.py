@@ -1,3 +1,3 @@
 # TODO Запилить тип объекта с поведением словаря
-class TB1ReadedSheets(dict):
+class TB1ReadedSheetsCollection(dict):
     pass

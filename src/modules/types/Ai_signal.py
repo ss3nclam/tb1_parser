@@ -17,4 +17,6 @@ class AiSignal(Signal):
     
 
     def __repr__(self) -> str:
-        return super().__repr__() + f',\nUnit: {self.unit},\nLL: {self.LL},\nLA: {self.LA},\nLW: {self.LW},\nHW: {self.HW},\nHA: {self.HA},\nHL: {self.HL},\nLE: {self.LE},\nHE: {self.HE}\n'
+        return super().__repr__() + f', Unit: {self.unit}, LL: {self.LL}, LA: {self.LA}, LW: {self.LW}, HW: {self.HW}, HA: {self.HA}, HL: {self.HL}, LE: {self.LE}, HE: {self.HE}'
+        # return super().__repr__()
+        # return super().__repr__() + f',\nUnit: {self.unit},\nLL: {self.LL},\nLA: {self.LA},\nLW: {self.LW},\nHW: {self.HW},\nHA: {self.HA},\nHL: {self.HL},\nLE: {self.LE},\nHE: {self.HE}\n'
