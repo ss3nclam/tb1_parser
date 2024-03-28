@@ -69,10 +69,10 @@ import logging
 
 import pandas
 
-from src.modules.tb1_parser.parser import TB1Parser
+from src.modules.tb1_parser.tb1_parser import TB1Parser
 from src.modules.tb1_reader.file_reader import TB1FileReader
-from src.modules.types.Ai_signal import AiSignal
-from src.modules.types.Ai_signals_collection import AiSignalsCollection
+from src.modules.types.ai_signal import AiSignal
+from src.modules.types.ai_signals_collection import AiSignalsCollection
 from src.modules.types.tb1_readed_sheets_collection import TB1ReadedSheetsCollection
 
 
@@ -92,19 +92,19 @@ reader = TB1FileReader(filepath='temp/table.xls')
 # reader.read('Ai')
 reader.read()
 tb1: TB1ReadedSheetsCollection = reader.sheets
-for sheet_name, sheet_df in tb1.items():
-    print(sheet_df)
+# for sheet_name, sheet_df in tb1.items():
+#     print(sheet_df)
 
-# parser = TB1Parser(tb1)
-# parser.start()
+parser = TB1Parser(tb1)
+parser.start()
 
-# Ai_signals: AiSignalsCollection = parser.collection['Ai']
+Ai_signals: AiSignalsCollection = parser.collection['Ai']
 # print(len(tuple(filter(lambda x: x.name != 'Резерв', Ai_signals))))
 
-# Ai_signals = parser.collection['Ai']
-# for signal in Ai_signals:
-#     signal: AiSignal
-#     print(signal)
+Ai_signals = parser.collection['Ai']
+for signal in Ai_signals:
+    signal: AiSignal
+    print(signal)
 
 
 

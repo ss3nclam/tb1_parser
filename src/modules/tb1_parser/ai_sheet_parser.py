@@ -5,8 +5,8 @@ from pandas import DataFrame
 from transliterate import translit
 
 from src.modules.regex_lib import TB1 as config
-from src.modules.types.Ai_signal import AiSignal
-from src.modules.types.Ai_signals_collection import AiSignalsCollection
+from src.modules.types.ai_signal import AiSignal
+from src.modules.types.ai_signals_collection import AiSignalsCollection
 
 
 class AiSheetParser:
@@ -109,6 +109,7 @@ class AiSheetParser:
         try:
             if (unit := range.split(' ')[-1]) and unit != 'нет':
                 out = unit
+                out = re.sub(r'\d+', '', out)
         except Exception as error:
             logging.error(f'{self.__logs_owner}: ошибка поиска единицы измерения в "{range}" диапазоне измерения - {error}')
         finally:
