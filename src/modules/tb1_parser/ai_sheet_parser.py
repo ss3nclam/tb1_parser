@@ -5,8 +5,8 @@ from pandas import DataFrame
 from transliterate import translit
 
 from src.modules.regex_lib import TB1 as config
-from src.modules.types.ai_signal import AiSignal
-from src.modules.types.ai_signals_collection import AiSignalsCollection
+from src.modules.tb1_parser.types.ai_signal import AiSignal
+from src.modules.tb1_parser.types.ai_signals_collection import AiSignalsCollection
 
 
 class AiSheetParser:

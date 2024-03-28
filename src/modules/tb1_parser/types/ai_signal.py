@@ -1,4 +1,4 @@
-from src.modules.types.signal import Signal
+from src.modules.tb1_parser.types.signal import Signal
 
 
 class AiSignal(Signal):

@@ -3,8 +3,10 @@ from typing import Literal
 
 from src.modules.regex_lib import TB1 as config
 from src.modules.tb1_parser.ai_sheet_parser import AiSheetParser
-from src.modules.types.parsed_tb1_collection import ParsedTB1Collection
-from src.modules.types.tb1_readed_sheets_collection import TB1ReadedSheetsCollection
+from src.modules.tb1_parser.types.parsed_tb1_collection import \
+    ParsedTB1Collection
+from src.modules.tb1_reader.types.tb1_readed_sheets_collection import \
+    TB1ReadedSheetsCollection
 
 
 all_avaible_sheets = list(config)
