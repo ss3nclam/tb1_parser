@@ -70,7 +70,7 @@ import logging
 import pandas
 
 from src.modules.tb1_parser.tb1_parser import TB1Parser
-from src.modules.tb1_parser.types.ai_signal import AiSignal
+from src.modules.tb1_parser.types._signal import Signal
 from src.modules.tb1_reader.tb1_file_reader import TB1FileReader
 from src.modules.tb1_reader.types.tb1_readed_sheets_collection import \
     TB1ReadedSheetsCollection
@@ -100,8 +100,9 @@ parser.start()
 for name, collection in parser.collection.items():
     print(name)
     for element in collection:
-        # if element.name != 'Резерв':
-        print(element)
+        element: Signal
+        if element.name != 'Резерв':
+            print(f'{element.name}: {element.formated_name}')
 
 # print(len(tuple(filter(lambda x: x.name != 'Резерв', Ai_signals))))
 

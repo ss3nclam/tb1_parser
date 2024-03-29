@@ -4,10 +4,6 @@ import re
 from pandas import DataFrame
 from transliterate import translit
 
-from src.modules.regex_lib import TB1 as config
-from src.modules.tb1_parser.types.ai_signal import AiSignal
-from src.modules.tb1_parser.types.ai_signals_collection import AiSignalsCollection
-
 
 class SheetParser:
 
@@ -16,6 +12,11 @@ class SheetParser:
         self._sheet = sheet
 
         self._result = None
+
+
+    # REFACT Отрефакторить метод очистки имени сигнала
+    def _clean_name(self):
+        pass
 
 
     # REFACT Отрефакторить метод поиска количества каналов для модуля
@@ -30,7 +31,7 @@ class SheetParser:
             pass
 
 
-    # TODO Написать метод для парсинга переменной сигнала
+    # REFACT Переписать метод для парсинга переменной сигнала
     def _parse_variable(self, raw_variable: str, raw_plc_module: str) -> int | tuple[int]:
         type_regex = r'^\D{2}'
         clean_input = lambda x: re.sub(type_regex, '', x)
@@ -57,11 +58,12 @@ class SheetParser:
             return out
 
 
-    replace_data = { # REFACT Перенести регулярку для транслитерации имени в либу
+    # REFACT Перенести регулярку для транслитерации имени в либу
+    replace_data = {
         r'\((\w+\b\s?){4,}\)': '',
         r'[\.\(\)\=\%\>\<\\\|\/\№\≤\≥\"\']': '',
         r'[Тт]очк\w+\b\s': 'т',
-        r'[Гг]рупп\w+\b\s': 'т',
+        r'[Гг]рупп\w+\b\s': 'г',
         r'[Оо]порн\w+\b\s[Пп]одш\w+\b': 'ОП',
         r'[Оо]порн\w+\b\-[Уу]порн\w+\b\s[Пп]одш\w+\b': 'ОУП',
         r'[Пп]одш\w+\b': 'подш',
@@ -72,6 +74,7 @@ class SheetParser:
         'Ток': 'I',
         'Напряжение': 'U',
         'Уровень': 'L',
+        'Вибрация': 'Вибр',
         'Виброперемещение': 'Вибр',
         'Виброскорость': 'Вибр'
     }
