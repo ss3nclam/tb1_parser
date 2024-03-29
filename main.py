@@ -100,8 +100,8 @@ parser.start()
 for name, collection in parser.collection.items():
     print(name)
     for element in collection:
-        if element.name != 'Резерв':
-            print(element)
+        # if element.name != 'Резерв':
+        print(element)
 
 # print(len(tuple(filter(lambda x: x.name != 'Резерв', Ai_signals))))
 
