@@ -1,9 +1,12 @@
-from src.modules.tb1_parser.types.signal import Signal
+from src.modules.tb1_parser.types._signal import Signal
 
 
 class AiSignal(Signal):
 
     def __init__(self) -> None:
+        '''
+        Дата-класс для аналоговых входных сигналов, потомок '_Signal'.
+        '''
         super().__init__()
         self.unit: None | str
         self.LL: None | float
@@ -17,6 +20,14 @@ class AiSignal(Signal):
     
 
     def __repr__(self) -> str:
-        return super().__repr__() + f', Unit: {self.unit}, LL: {self.LL}, LA: {self.LA}, LW: {self.LW}, HW: {self.HW}, HA: {self.HA}, HL: {self.HL}, LE: {self.LE}, HE: {self.HE}'
-        # return super().__repr__()
-        # return super().__repr__() + f',\nUnit: {self.unit},\nLL: {self.LL},\nLA: {self.LA},\nLW: {self.LW},\nHW: {self.HW},\nHA: {self.HA},\nHL: {self.HL},\nLE: {self.LE},\nHE: {self.HE}\n'
+        out: str = \
+            f', unit: {self.unit}, ' + \
+            f'LL: {self.LL}, ' + \
+            f'LA: {self.LA}, ' + \
+            f'LW: {self.LW}, ' + \
+            f'HW: {self.HW}, ' + \
+            f'HA: {self.HA}, ' + \
+            f'HL: {self.HL}, ' + \
+            f'LE: {self.LE}, ' + \
+            f'HE: {self.HE}'
+        return super().__repr__() + out

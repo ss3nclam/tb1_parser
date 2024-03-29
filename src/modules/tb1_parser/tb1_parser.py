@@ -1,8 +1,9 @@
 import logging
-from typing import Literal
 
 from src.modules.regex_lib import TB1 as config
 from src.modules.tb1_parser.ai_sheet_parser import AiSheetParser
+from src.modules.tb1_parser.di_sheet_parser import DiSheetParser
+from src.modules.tb1_parser.do_sheet_parser import DoSheetParser
 from src.modules.tb1_parser.types.parsed_tb1_collection import \
     ParsedTB1Collection
 from src.modules.tb1_reader.types.tb1_readed_sheets_collection import \
@@ -29,9 +30,9 @@ class TB1Parser:
                     case 'Ai':
                         parser = AiSheetParser(sheet_dataframe)
                     case 'Di':
-                        continue # TODO Написать парсера Di листов
+                        parser = DiSheetParser(sheet_dataframe)
                     case 'Do':
-                        continue # TODO Написать парсера Do листов
+                        parser = DoSheetParser(sheet_dataframe)
                     case _:
                         raise ValueError('передан неопознанный тип листа')
                 parser.start()

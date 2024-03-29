@@ -70,14 +70,13 @@ import logging
 import pandas
 
 from src.modules.tb1_parser.tb1_parser import TB1Parser
-from src.modules.tb1_reader.tb1_file_reader import TB1FileReader
 from src.modules.tb1_parser.types.ai_signal import AiSignal
-from src.modules.tb1_parser.types.ai_signals_collection import AiSignalsCollection
-from src.modules.tb1_reader.types.tb1_readed_sheets_collection import TB1ReadedSheetsCollection
-
+from src.modules.tb1_reader.tb1_file_reader import TB1FileReader
+from src.modules.tb1_reader.types.tb1_readed_sheets_collection import \
+    TB1ReadedSheetsCollection
 
 # Настройка логера
-logging.basicConfig(level=logging.DEBUG)
+# logging.basicConfig(level=logging.DEBUG)
 
 # Настройка полного вывода таблицы
 pandas.set_option("display.max_rows", None)
@@ -85,9 +84,9 @@ pandas.set_option('display.max_colwidth', None)
 
 
 
-reader = TB1FileReader(filepath='temp/table.xls')
+# reader = TB1FileReader(filepath='temp/table.xls')
 # reader = TB1FileReader(filepath='temp/table.xlsx')
-# reader = TB1FileReader(filepath='temp/ЛДАР.421245.751_ТБ1.xlsx')
+reader = TB1FileReader(filepath='temp/ЛДАР.421245.751_ТБ1.xlsx')
 # reader = TB1FileReader(filepath='temp/ЛДАР.421245.754 ТБ1.xlsx')
 # reader.read('Ai')
 reader.read()
@@ -98,13 +97,17 @@ tb1: TB1ReadedSheetsCollection = reader.sheets
 parser = TB1Parser(tb1)
 parser.start()
 
-Ai_signals: AiSignalsCollection = parser.collection['Ai']
+for name, collection in parser.collection.items():
+    print(name)
+    for element in collection:
+        print(element)
+
 # print(len(tuple(filter(lambda x: x.name != 'Резерв', Ai_signals))))
 
-Ai_signals = parser.collection['Ai']
-for signal in Ai_signals:
-    signal: AiSignal
-    print(signal)
+# Ai_signals = parser.collection['Ai']
+# for signal in Ai_signals:
+#     signal: AiSignal
+#     print(signal)
 
 
 
