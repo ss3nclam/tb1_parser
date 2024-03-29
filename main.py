@@ -84,9 +84,9 @@ pandas.set_option('display.max_colwidth', None)
 
 
 
-# reader = TB1FileReader(filepath='temp/table.xls')
+reader = TB1FileReader(filepath='temp/table.xls')
 # reader = TB1FileReader(filepath='temp/table.xlsx')
-reader = TB1FileReader(filepath='temp/ЛДАР.421245.751_ТБ1.xlsx')
+# reader = TB1FileReader(filepath='temp/ЛДАР.421245.751_ТБ1.xlsx')
 # reader = TB1FileReader(filepath='temp/ЛДАР.421245.754 ТБ1.xlsx')
 # reader.read('Ai')
 reader.read()
@@ -100,7 +100,8 @@ parser.start()
 for name, collection in parser.collection.items():
     print(name)
     for element in collection:
-        print(element)
+        if element.name != 'Резерв':
+            print(element)
 
 # print(len(tuple(filter(lambda x: x.name != 'Резерв', Ai_signals))))
 
