@@ -5,7 +5,7 @@ class DiSignal(DoSignal):
 
     def __init__(self) -> None:
         '''
-        Дата-класс для дискретных выходных сигналов, потомок '_Signal -> DoSignal'.
+        Дата-класс для дискретных выходных сигналов, потомок 'Signal -> DoSignal'.
         '''
         super().__init__()
         self.alarm_signal: None | bool

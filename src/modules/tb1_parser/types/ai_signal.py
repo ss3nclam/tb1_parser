@@ -5,7 +5,7 @@ class AiSignal(Signal):
 
     def __init__(self) -> None:
         '''
-        Дата-класс для аналоговых входных сигналов, потомок '_Signal'.
+        Дата-класс для аналоговых входных сигналов, потомок 'Signal'.
         '''
         super().__init__()
         self.unit: None | str
