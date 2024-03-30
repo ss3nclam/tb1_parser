@@ -43,7 +43,7 @@ class DoSheetParser(SheetParser):
                 new = DoSignal()
                 new.plc_module = self._parse_plc_module(row.plc_module)
                 new.variable = self._parse_variable(row.variable, row.plc_module)
-                new.name = row.name
+                new.name = self._clean_name(row.name)
                 new.formated_name = self._format_signal_name(row.name)
                 new.logic_value = self._parse_logic_value(row.logic_value)
 
