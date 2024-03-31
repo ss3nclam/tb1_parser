@@ -98,11 +98,12 @@ parser = TB1Parser(tb1)
 parser.start()
 
 for name, collection in parser.collection.items():
-    print(name)
+    print(collection.__class__.__name__)
     for element in collection:
         element: Signal
         if element.name != 'Резерв':
-            print(f'{element.name}: {element.formated_name}')
+            print(element)
+            # print(f'{element.name}: {element.formated_name}')
 
 # print(len(tuple(filter(lambda x: x.name != 'Резерв', Ai_signals))))
 

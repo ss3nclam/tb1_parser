@@ -17,17 +17,3 @@ class AiSignal(Signal):
         self.HL: None | float
         self.LE: None | float
         self.HE: None | float
-    
-
-    def __repr__(self) -> str:
-        out: str = \
-            f', unit: {self.unit}, ' + \
-            f'LL: {self.LL}, ' + \
-            f'LA: {self.LA}, ' + \
-            f'LW: {self.LW}, ' + \
-            f'HW: {self.HW}, ' + \
-            f'HA: {self.HA}, ' + \
-            f'HL: {self.HL}, ' + \
-            f'LE: {self.LE}, ' + \
-            f'HE: {self.HE}'
-        return super().__repr__() + out

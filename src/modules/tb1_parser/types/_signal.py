@@ -15,4 +15,6 @@ class Signal(object):
 
 
     def __repr__(self) -> str:
-        return f'var: {self.variable}, formated_name: {self.formated_name}, module: {self.plc_module}'
+        signal_type: str = self.__class__.__name__
+        signal_params: str = str(self.__dict__)[1:-1]
+        return f'{signal_type}({signal_params})'

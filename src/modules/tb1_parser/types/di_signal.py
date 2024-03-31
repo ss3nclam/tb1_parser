@@ -11,12 +11,4 @@ class DiSignal(DoSignal):
         self.alarm_signal: None | bool
         self.warning_signal: None | bool
         self.error_signal: None | bool
-
-    
-    def __repr__(self) -> str:
-        out: str = \
-            f', alarm: {self.alarm_signal}, ' + \
-            f'warning: {self.warning_signal}, ' + \
-            f'error: {self.error_signal}'
-        return super().__repr__() + out
             
