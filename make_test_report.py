@@ -17,10 +17,10 @@ pandas.set_option("display.max_rows", None)
 pandas.set_option('display.max_colwidth', None)
 
 
-# filename = 'table.xls'
+filename = 'table.xls'
 # filename = 'table.xlsx'
 # filename = 'ЛДАР.421245.751_ТБ1.xlsx'
-filename = 'ЛДАР.421245.754 ТБ1.xlsx'
+# filename = 'ЛДАР.421245.754 ТБ1.xlsx'
 # filename = 'ЛДАР.421245.757 ТБ1.xlsx'
 
 reader = TB1FileReader(filepath=f'temp/{filename}')
