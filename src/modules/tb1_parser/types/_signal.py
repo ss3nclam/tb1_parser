@@ -15,6 +15,4 @@ class Signal(object):
 
 
     def __repr__(self) -> str:
-        signal_type: str = self.__class__.__name__
-        signal_params: str = str(self.__dict__)[1:-1]
-        return f'{signal_type}({signal_params})'
+        return f'{self.__class__.__name__}({str(self.__dict__)[1:-1]})'
