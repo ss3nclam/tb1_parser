@@ -32,11 +32,11 @@ class TB1FileReader:
             sys.exit(1)
 
 
-    def isvalid_sheet_type(self, input: Any) -> bool: # TODO Допилить метод валидации запрашиваемого контента
+    def isvalid_sheet_type(self, input: Any) -> bool:
         return input in all_avaible_sheets
 
 
-    def read(self, sheets: str | list[Literal['Ai', 'Di', 'Do']] = all_avaible_sheets): # TODO Допилить метод чтения
+    def read(self, sheets: str | list[Literal['Ai', 'Di', 'Do']] = all_avaible_sheets):
         logging.info(f'{self.__logs_owner}: начало чтения ТБ1..')
 
         if not self.isvalid_sheet_type(sheets):

@@ -18,7 +18,7 @@ from src.modules.tb1_parser.types.parsed_tb1_collection import \
 
 REPORT_CONFIG: dict = {
     'Ai': {
-        'sheet_name': 'Аналог. вх',
+        'sheet_name': 'Аналог. вх.',
         'columns': [
             'Наименование параметра',
             'Тип',

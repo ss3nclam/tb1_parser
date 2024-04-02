@@ -3,11 +3,14 @@ import re
 
 from pandas import DataFrame
 
-from src.modules.regex_lib import TB1 as config
+from src.modules.regex_lib import TB1
 from src.modules.tb1_parser._sheet_parser import SheetParser
 from src.modules.tb1_parser.types.ai_signal import AiSignal
 from src.modules.tb1_parser.types.ai_signals_collection import \
     AiSignalsCollection
+
+
+config = TB1['Ai']['regex']
 
 
 class AiSheetParser(SheetParser):
@@ -37,19 +40,19 @@ class AiSheetParser(SheetParser):
         start = end = None
         try:
             # Отсев пустого диапазона
-            if raw_range is None or re.fullmatch(config['Ai']['regex']['content']['validate']['empty_range'], raw_range):
+            if raw_range is None or re.fullmatch(config['content']['validate']['empty_range'], raw_range):
                 return start, end
             
             else:
                 # Очистка инпута от мусора
-                replace_methods: dict = config['Ai']['regex']['content']['replace']
+                replace_methods: dict = config['content']['replace']
                 for method in replace_methods:
                     method_data: dict = replace_methods.get(method)
                     pattern, new_value = (i for i in method_data.values())
                     raw_range = re.sub(pattern, new_value, raw_range)
 
                 # Если диапазон простой
-                simple_range_regex = r'^(([0-9]+[.,])?[0-9]+)\s?\-\s?(([0-9]+[.,])?[0-9]+)(\s?\D+)?$' # REFACT Перенести регулярку парсинга простого диапазона в либу
+                simple_range_regex = config['content']['validate']['simple_range']
                 if re.fullmatch(simple_range_regex, raw_range):
                     simple_range = re.findall(simple_range_regex, raw_range)
                     start= simple_range[0][0]
@@ -58,7 +61,7 @@ class AiSheetParser(SheetParser):
 
                 else:
                     # Поиск значений в очищеном инпуте
-                    matches_list = re.findall(config['Ai']['regex']['content']['validate']['range_value'], raw_range)
+                    matches_list = re.findall(config['content']['validate']['range_value'], raw_range)
                     matches_count = len(matches_list)
 
                     if matches_count == 1:
@@ -91,7 +94,7 @@ class AiSheetParser(SheetParser):
 
     
     def start(self) -> None:
-        if not list(config['Ai']['regex']['columns']['validate']['names'].keys()) == list(self._sheet):
+        if not list(config['columns']['validate']['names'].keys()) == list(self._sheet):
             logging.error(f'{self._logs_owner}: передан неверный лист аналоговых сигналов')
 
         out = []

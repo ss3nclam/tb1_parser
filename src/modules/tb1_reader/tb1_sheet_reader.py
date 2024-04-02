@@ -97,7 +97,7 @@ class TB1SheetReader:
         # TODO Логи
         # TODO Исключения
 
-        # TODO Перенести в метод валидации FileReader'а
+        # REFACT Перенести в метод валидации FileReader'а
         if not isinstance(content_type, str):
             raise TypeError(f'{type(content_type)} не является допустимым типом данных для "content_type"')
         if content_type not in list(config):
@@ -157,5 +157,5 @@ class TB1SheetReader:
         return sheet
 
 
-    def get(self, content_type: str) -> None | DataFrame: # TODO Допилить метод получения датафрейма 
+    def get(self, content_type: str) -> None | DataFrame:
         return self.__read_sheet(content_type)

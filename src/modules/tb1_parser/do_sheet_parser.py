@@ -1,6 +1,4 @@
-from curses.ascii import isdigit
 import logging
-import re
 
 from pandas import DataFrame
 
