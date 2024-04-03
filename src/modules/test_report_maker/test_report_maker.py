@@ -7,6 +7,50 @@ from src.modules.tb1_parser.types.parsed_tb1_collection import \
 from src.modules.test_report_maker.types.test_report import TestReport
 
 
+REPORT_CONFIG: dict = {
+    'Ai': {
+        'sheet_name': 'Аналог. вх.',
+        'columns': [
+            'Наименование параметра',
+            'Тип',
+            'Значение уставки',
+            'Аналоговые параметры',
+            'Главный экран',
+            'Всплывающее окно',
+            'Сообщения',
+            'Тренды',
+            'Смена уставок',
+            'Вывод в ремонт (графика)',
+            'Вывод в ремонт (журнал сообщений)',
+            'Вывод в ремонт (блокировка срабатывая защиты)'
+        ]
+    },
+    'Di': {
+        'sheet_name': 'Дискр. вх.',
+        'columns': [
+            "Наименование параметра",
+            "Логическое значение",
+            "Главный экран",
+            "Сообщения",
+            "Всплывающее окно",
+            "Всплывающее окно",
+            "Всплывающее окно",
+            "Тип сообщения"
+        ]
+    },
+    'Do': {
+        'sheet_name': 'Дискр. вых.',
+        'columns': [
+            "Наименование параметра",
+            "Логическое значение",
+            "Индикация команды (для кранов)",
+            "Сообщение о подаче команды",
+            "Исполнение на имитаторе"
+        ]
+    }
+}
+
+
 class TestReportMaker:
 
     def __init__(self, parsed_collection: ParsedTB1Collection) -> None:
@@ -49,5 +93,5 @@ class TestReportMaker:
         pass
 
 
-    def write_to_excel(self, filepath: str):
+    def write_to_excel(self, filename: str):
         pass
