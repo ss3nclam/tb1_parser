@@ -6,12 +6,8 @@ from pandas import DataFrame, ExcelWriter
 from src.modules.tb1_parser.types.di_signal import DiSignal
 from src.modules.tb1_parser.types.do_signal import DoSignal
 from src.modules.tb1_parser.types.ai_signal import AiSignal
-from src.modules.tb1_parser.types.ai_signals_collection import \
-    AiSignalsCollection
-from src.modules.tb1_parser.types.di_signals_collection import \
-    DiSignalsCollection
-from src.modules.tb1_parser.types.do_signals_collection import \
-    DoSignalsCollection
+from src.modules.tb1_parser.types.signals_collection import \
+    SignalsCollection
 from src.modules.tb1_parser.types.parsed_tb1_collection import \
     ParsedTB1Collection
 
@@ -70,9 +66,9 @@ class TemporaryReportMaker:
 
 
     # REFACT Полностью переписать метод создания листа на xlsxwriter
-    def __make_signal_sheet(self, collection: AiSignalsCollection | DiSignalsCollection | DoSignalsCollection) -> DataFrame:
+    def __make_signal_sheet(self, collection: SignalsCollection) -> DataFrame:
         try:
-            if isinstance(collection, AiSignalsCollection):
+            if isinstance(collection, SignalsCollection):
                 columns = REPORT_CONFIG['Ai']['columns']
                 sheet = DataFrame(columns=columns)
                 for signal in (signal for signal in collection if signal.name.lower() != 'резерв'):
@@ -83,14 +79,14 @@ class TemporaryReportMaker:
                         value: float | None
                         if value is not None:
                             sheet.loc[len(sheet.index)] = [numpy.nan, name, round(value) if value.is_integer() else value, *['']*(len(columns) - 3)]
-            if isinstance(collection, DiSignalsCollection):
+            if isinstance(collection, SignalsCollection):
                 columns = REPORT_CONFIG['Di']['columns']
                 sheet = DataFrame(columns=columns)
                 for signal in (signal for signal in collection if signal.name.lower() != 'резерв'):
                     signal: DiSignal
                     logic_value = signal.logic_value
                     sheet.loc[len(sheet.index)] = [signal.name, (logic_value if logic_value is not None else 'X'), *['']*(len(columns) - 2)]
-            if isinstance(collection, DoSignalsCollection):
+            if isinstance(collection, SignalsCollection):
                 columns = REPORT_CONFIG['Do']['columns']
                 sheet = DataFrame(columns=columns)
                 for signal in (signal for signal in collection if signal.name.lower() != 'резерв'):

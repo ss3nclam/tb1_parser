@@ -15,4 +15,4 @@ class Signal(object):
 
 
     def __repr__(self) -> str:
-        return f'{self.__class__.__name__}{tuple(self.__dict__)}'
+        return f'{self.__class__.__name__}({str(self.__dict__)[1:-1]})'

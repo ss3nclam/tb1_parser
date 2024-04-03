@@ -3,7 +3,7 @@ import logging
 from pandas import DataFrame
 
 from src.modules.tb1_parser.types.do_signal import DoSignal
-from src.modules.tb1_parser.types.do_signals_collection import DoSignalsCollection
+from src.modules.tb1_parser.types.signals_collection import SignalsCollection
 from src.modules.regex_lib import TB1 as config
 from src.modules.tb1_parser._sheet_parser import SheetParser
 
@@ -50,10 +50,11 @@ class DoSheetParser(SheetParser):
             except Exception as error:
                 logging.error(f'{self._logs_owner}:{row.variable}: ошибка парсинга - {error}')
                 out.append(new)
-        self._result = DoSignalsCollection(out)
+        self._result = SignalsCollection(out)
+        self._result.signals_type = 'Do'
 
 
-    def get_result(self) -> DoSignalsCollection | None:
+    def get_result(self) -> SignalsCollection | None:
         if out := self._result:
             return out
         else:

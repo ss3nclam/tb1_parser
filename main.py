@@ -71,6 +71,7 @@ import pandas
 
 from src.modules.tb1_parser.tb1_parser import TB1Parser
 from src.modules.tb1_parser.types._signal import Signal
+from src.modules.tb1_parser.types.signals_collection import SignalsCollection
 from src.modules.tb1_reader.tb1_file_reader import TB1FileReader
 from src.modules.tb1_reader.types.tb1_readed_sheets_collection import \
     TB1ReadedSheetsCollection
@@ -84,10 +85,10 @@ pandas.set_option('display.max_colwidth', None)
 
 
 
-# reader = TB1FileReader(filepath='temp/table.xls')
+reader = TB1FileReader(filepath='temp/table.xls')
 # reader = TB1FileReader(filepath='temp/table.xlsx')
 # reader = TB1FileReader(filepath='temp/ЛДАР.421245.751_ТБ1.xlsx')
-reader = TB1FileReader(filepath='temp/ЛДАР.421245.754 ТБ1.xlsx')
+# reader = TB1FileReader(filepath='temp/ЛДАР.421245.754 ТБ1.xlsx')
 # reader = TB1FileReader(filepath='temp\ЛДАР.421245.757 ТБ1.xlsx')
 # reader.read('Ai')
 reader.read()
@@ -99,7 +100,8 @@ parser = TB1Parser(tb1)
 parser.start()
 
 for name, collection in parser.collection.items():
-    print(collection.__class__.__name__)
+    collection: SignalsCollection
+    print(collection.signals_type)
     for element in collection:
         element: Signal
         if element.name != 'Резерв':

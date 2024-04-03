@@ -5,8 +5,8 @@ from pandas import DataFrame
 from src.modules.tb1_parser.do_sheet_parser import DoSheetParser
 from src.modules.regex_lib import TB1 as config
 from src.modules.tb1_parser.types.di_signal import DiSignal
-from src.modules.tb1_parser.types.di_signals_collection import \
-    DiSignalsCollection
+from src.modules.tb1_parser.types.signals_collection import \
+    SignalsCollection
 
 
 class DiSheetParser(DoSheetParser):
@@ -46,10 +46,11 @@ class DiSheetParser(DoSheetParser):
             except Exception as error:
                 logging.error(f'{self._logs_owner}:{row.variable}: ошибка парсинга - {error}')
                 out.append(new)
-        self._result = DiSignalsCollection(out)
+        self._result = SignalsCollection(out)
+        self._result.signals_type = 'Di'
 
 
-    def get_result(self) -> DiSignalsCollection | None:
+    def get_result(self) -> SignalsCollection | None:
         if out := self._result:
             return out
         else:

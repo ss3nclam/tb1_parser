@@ -6,8 +6,8 @@ from pandas import DataFrame
 from src.modules.regex_lib import TB1
 from src.modules.tb1_parser._sheet_parser import SheetParser
 from src.modules.tb1_parser.types.ai_signal import AiSignal
-from src.modules.tb1_parser.types.ai_signals_collection import \
-    AiSignalsCollection
+from src.modules.tb1_parser.types.signals_collection import \
+    SignalsCollection
 
 
 config = TB1['Ai']['regex']
@@ -117,10 +117,11 @@ class AiSheetParser(SheetParser):
             except Exception as error:
                 logging.error(f'{self._logs_owner}:{row.variable}: ошибка парсинга - {error}')
                 out.append(new)
-        self._result = AiSignalsCollection(out)
+        self._result = SignalsCollection(out)
+        self._result.signals_type = 'Ai'
 
 
-    def get_result(self) -> AiSignalsCollection | None:
+    def get_result(self) -> SignalsCollection | None:
         if out := self._result:
             return out
         else:
