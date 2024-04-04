@@ -1,7 +1,10 @@
 from dataclasses import dataclass
+import logging
 
 from pandas import DataFrame
 
+from src.modules.tb1_parser.types.ai_signal import AiSignal
+from src.modules.tb1_parser.types.di_signal import DiSignal
 from src.modules.tb1_parser.types.parsed_tb1_collection import \
     ParsedTB1Collection
 from src.modules.test_report_maker.types.test_report import TestReport
@@ -60,17 +63,41 @@ class TestReportMaker:
         self.__report = TestReport()
 
 
+    # REFACT Отрефакторить метод создания Ai листа
     def __make_Ai_sheet(self):
         try:
-            Ai_signals = self.__parsed_collection['Ai']
+            columns = REPORT_CONFIG['Ai']['columns']
+            sheet = DataFrame(columns=columns)
+
+            for signal in (signal for signal in self.__parsed_collection['Ai'] if signal.name.lower() != 'резерв'):
+                signal: AiSignal
+                sheet.loc[len(sheet.index)] = [signal.name, 'знач.', *['']*(len(columns) - 2)]
+                setpoints = {'НГ': signal.LL, 'НА': signal.LA, 'НП': signal.LW, 'ВП': signal.HW, 'ВА': signal.HA, 'ВГ': signal.HL}
+                for name, value in setpoints.items():
+                    value: float | None
+                    if value is not None:
+                        sheet.loc[len(sheet.index)] = ['', name, round(value) if value.is_integer() else value, *['']*(len(columns) - 3)]
+
+            self.__report.Ai_sheet = sheet
+
         except Exception as error:
-            pass
-        finally:
-            pass
+            logging.error(f'{self.__logs_owner}:Ai_sheet: ошибка формирования листа - {error}')
 
     
+    # REFACT Отрефакторить метод создания Di листа
     def __make_Di_sheet(self):
-        pass
+        try:
+            columns = REPORT_CONFIG['Di']['columns']
+            sheet = DataFrame(columns=columns)
+            for signal in (signal for signal in self.__parsed_collection['Di'] if signal.name.lower() != 'резерв'):
+                signal: DiSignal
+                logic_value = signal.logic_value
+                sheet.loc[len(sheet.index)] = [signal.name, (logic_value if logic_value is not None else 'X'), *['']*(len(columns) - 2)]
+
+            self.__report.Ai_sheet = sheet
+
+        except Exception as error:
+            logging.error(f'{self.__logs_owner}:Di_sheet: ошибка формирования листа - {error}')
     
     
     def __make_Do_sheet(self):

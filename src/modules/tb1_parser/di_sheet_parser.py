@@ -40,6 +40,7 @@ class DiSheetParser(DoSheetParser):
                 new.alarm_signal = self.__parse_signal(row.alarm_signal)
                 new.warning_signal = self.__parse_signal(row.warning_signal)
                 new.error_signal = self.__parse_signal(row.error_signal)
+                new.tele_signal = self.__parse_signal(row.tele_signal)
 
                 out.append(new)
                 logging.info(f'{self._logs_owner}:{row.variable}: значения успешно получены')

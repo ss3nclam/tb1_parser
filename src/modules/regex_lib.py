@@ -68,6 +68,7 @@ TB1: dict = {
                         'logic_value': r'^.*[Лл]ог(\w+)?\.?\s?[Зз]нач(\w+)?\.?',
                         'alarm_signal': r'^.*(АС).*$',
                         'warning_signal': r'^.*(ПС).*$',
+                        'tele_signal': r'^.*(ТС).*$',
                         'error_signal': r'^.*(НС).*$',
                         'plc_module': r'^.*([Мм]одуль\s(\w+)?).*$'
                     }

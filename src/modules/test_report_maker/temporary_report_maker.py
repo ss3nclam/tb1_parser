@@ -68,7 +68,8 @@ class TemporaryReportMaker:
     # REFACT Полностью переписать метод создания листа на xlsxwriter
     def __make_signal_sheet(self, collection: SignalsCollection) -> DataFrame:
         try:
-            if isinstance(collection, SignalsCollection):
+            col_type = collection.signals_type
+            if col_type == 'Ai':
                 columns = REPORT_CONFIG['Ai']['columns']
                 sheet = DataFrame(columns=columns)
                 for signal in (signal for signal in collection if signal.name.lower() != 'резерв'):
@@ -79,14 +80,14 @@ class TemporaryReportMaker:
                         value: float | None
                         if value is not None:
                             sheet.loc[len(sheet.index)] = [numpy.nan, name, round(value) if value.is_integer() else value, *['']*(len(columns) - 3)]
-            if isinstance(collection, SignalsCollection):
+            if col_type == 'Di':
                 columns = REPORT_CONFIG['Di']['columns']
                 sheet = DataFrame(columns=columns)
                 for signal in (signal for signal in collection if signal.name.lower() != 'резерв'):
                     signal: DiSignal
                     logic_value = signal.logic_value
                     sheet.loc[len(sheet.index)] = [signal.name, (logic_value if logic_value is not None else 'X'), *['']*(len(columns) - 2)]
-            if isinstance(collection, SignalsCollection):
+            if col_type == 'Do':
                 columns = REPORT_CONFIG['Do']['columns']
                 sheet = DataFrame(columns=columns)
                 for signal in (signal for signal in collection if signal.name.lower() != 'резерв'):
@@ -101,17 +102,10 @@ class TemporaryReportMaker:
         try:
             logging.info(f'{self.__logs_owner}: начало формирования отчёта..')
             for sheet_type, collection in self.__tb1.items():
-                match sheet_type:
-                    case 'Ai':
-                        output_df = self.__make_signal_sheet(collection)
-                    case 'Di':
-                        output_df = self.__make_signal_sheet(collection)
-                    case 'Do':
-                        output_df = self.__make_signal_sheet(collection)
-                    case _:
-                        raise ValueError('передан неопознанный тип листа')
+                output_df = self.__make_signal_sheet(collection)
                 self.__report[sheet_type] = output_df
                 logging.info(f'{self.__logs_owner}:{sheet_type}: лист успешно сформирован')
+                print(self.__report)
         except Exception as error:
             logging.error(f'{self.__logs_owner}: ошибка создания отчёта - {error}')
 
