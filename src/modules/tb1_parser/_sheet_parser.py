@@ -4,7 +4,7 @@ import re
 from pandas import DataFrame
 from transliterate import translit
 
-from src.modules.regex_lib import PARSER as config
+from src.modules.tb1_parser._regex_lib import PARSER as config
 
 
 class SheetParser:

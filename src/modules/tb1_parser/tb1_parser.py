@@ -1,13 +1,14 @@
 import logging
 
-from src.modules.regex_lib import TB1 as config
-from src.modules.tb1_parser.ai_sheet_parser import AiSheetParser
-from src.modules.tb1_parser.di_sheet_parser import DiSheetParser
-from src.modules.tb1_parser.do_sheet_parser import DoSheetParser
+from src.modules.tb1_parser._regex_lib import TB1 as config
+from src.modules.tb1_parser._ai_sheet_parser import AiSheetParser
+from src.modules.tb1_parser._di_sheet_parser import DiSheetParser
+from src.modules.tb1_parser._do_sheet_parser import DoSheetParser
 from src.modules.tb1_parser.types.parsed_tb1_collection import \
     ParsedTB1Collection
-from src.modules.tb1_reader.types.tb1_readed_sheets_collection import \
+from src.modules.tb1_parser.types.tb1_readed_sheets_collection import \
     TB1ReadedSheetsCollection
+from src.modules.tb1_parser._tb1_file_reader import TB1FileReader
 
 
 all_avaible_sheets = list(config)
@@ -15,14 +16,22 @@ all_avaible_sheets = list(config)
 
 class TB1Parser:
 
-    def __init__(self, readed_sheets: TB1ReadedSheetsCollection) -> None:
+    def __init__(self, filepath: str) -> None:
         self.__logs_owner: str = self.__class__.__name__
-        self.__readed_sheets = readed_sheets
+        self.__readed_sheets: TB1ReadedSheetsCollection = self.__get_readed_sheets(filepath)
 
         self.collection: ParsedTB1Collection = {}
     
 
-    def start(self):
+    def __get_readed_sheets(self, filepath: str) -> TB1ReadedSheetsCollection:
+        file_reader = TB1FileReader(filepath)
+        file_reader.read()
+        out = file_reader.sheets
+
+        return out
+
+
+    def read(self):
         try:
             for sheet_type, sheet_dataframe in self.__readed_sheets.items():
                 logging.info(f'{self.__logs_owner}:{sheet_type}: начало парсинга..')

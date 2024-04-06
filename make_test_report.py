@@ -5,8 +5,8 @@ import pandas
 from src.modules.test_report_maker.temporary_report_maker import TemporaryReportMaker
 from src.modules.tb1_parser.tb1_parser import TB1Parser
 from src.modules.tb1_parser.types._signal import Signal
-from src.modules.tb1_reader.tb1_file_reader import TB1FileReader
-from src.modules.tb1_reader.types.tb1_readed_sheets_collection import \
+from src.modules.tb1_parser._tb1_file_reader import TB1FileReader
+from src.modules.tb1_parser.types.tb1_readed_sheets_collection import \
     TB1ReadedSheetsCollection
 
 # Настройка логера
@@ -30,7 +30,7 @@ tb1: TB1ReadedSheetsCollection = reader.sheets
 #     print(sheet_df)
 
 parser = TB1Parser(tb1)
-parser.start()
+parser.read()
 signals_collection = parser.collection
 
 for name, collection in parser.collection.items():

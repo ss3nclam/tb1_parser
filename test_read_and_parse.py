@@ -5,8 +5,8 @@ import pandas
 from src.modules.tb1_parser.tb1_parser import TB1Parser
 from src.modules.tb1_parser.types._signal import Signal
 from src.modules.tb1_parser.types.signals_collection import SignalsCollection
-from src.modules.tb1_reader.tb1_file_reader import TB1FileReader
-from src.modules.tb1_reader.types.tb1_readed_sheets_collection import \
+from src.modules.tb1_parser._tb1_file_reader import TB1FileReader
+from src.modules.tb1_parser.types.tb1_readed_sheets_collection import \
     TB1ReadedSheetsCollection
 
 # Настройка логера
@@ -26,7 +26,7 @@ for sheet_name, sheet_df in tb1.items():
     print(sheet_df)
 
 parser = TB1Parser(tb1)
-parser.start()
+parser.read()
 
 for name, collection in parser.collection.items():
     collection: SignalsCollection
