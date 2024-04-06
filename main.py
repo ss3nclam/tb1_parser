@@ -57,14 +57,6 @@
 #     main()
 
 
-
-
-
-
-
-
-
-
 import logging
 
 import pandas
@@ -82,19 +74,16 @@ pandas.set_option('display.max_colwidth', None)
 
 
 
-# reader = TB1FileReader(filepath='temp/table.xls')
-# reader = TB1FileReader(filepath='temp/table.xlsx')
-# reader = TB1FileReader(filepath='temp/ЛДАР.421245.751_ТБ1.xlsx')
-# reader = TB1FileReader(filepath='temp/ЛДАР.421245.754 ТБ1.xlsx')
-# reader = TB1FileReader(filepath='temp\ЛДАР.421245.757 ТБ1.xlsx')
-# reader.read('Ai')
-# reader.read()
-# tb1: TB1ReadedSheetsCollection = reader.sheets
-# for sheet_name, sheet_df in tb1.items():
-#     print(sheet_df)
+filepath='temp/table.xls'
+# filepath='temp/table.xlsx'
+# filepath='temp/ЛДАР.421245.751_ТБ1.xlsx'
+# filepath='temp/ЛДАР.421245.754 ТБ1.xlsx'
+# filepath='temp\ЛДАР.421245.757 ТБ1.xlsx'
 
-parser = TB1Parser('temp/table.xlsx')
+
+parser = TB1Parser(filepath)
 parser.read()
+
 
 for name, collection in parser.collection.items():
     collection: SignalsCollection
@@ -104,22 +93,6 @@ for name, collection in parser.collection.items():
         if element.name != 'Резерв':
             print(element)
             # print(f'{element.name}: {element.formated_name}')
-
-# print(len(tuple(filter(lambda x: x.name != 'Резерв', Ai_signals))))
-
-# Ai_signals = parser.collection['Ai']
-# for signal in Ai_signals:
-#     signal: AiSignal
-#     print(signal)
-
-
-
-
-
-
-
-
-
 
 
 # with open('temp/proc_AI.st', 'a') as proc_AI:
