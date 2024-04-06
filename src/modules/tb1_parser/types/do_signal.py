@@ -1,6 +1,6 @@
 from typing import Literal
 
-from src.modules.tb1_parser.types._signal import Signal
+from ._signal import Signal
 
 
 class DoSignal(Signal):

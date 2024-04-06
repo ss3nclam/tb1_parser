@@ -4,9 +4,9 @@ from typing import Any, Literal
 
 from pandas import DataFrame, ExcelFile
 
-from src.modules.tb1_parser._regex_lib import TB1 as config
-from src.modules.tb1_parser._tb1_sheet_reader import TB1SheetReader
-from src.modules.tb1_parser.types.tb1_readed_sheets_collection import TB1ReadedSheetsCollection
+from ._regex_lib import TB1 as config
+from ._tb1_sheet_reader import TB1SheetReader
+from .types.tb1_readed_sheets_collection import TB1ReadedSheetsCollection
 
 
 all_avaible_sheets = list(config)

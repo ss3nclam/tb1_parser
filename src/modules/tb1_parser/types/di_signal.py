@@ -1,4 +1,4 @@
-from src.modules.tb1_parser.types.do_signal import DoSignal
+from .do_signal import DoSignal
 
 
 class DiSignal(DoSignal):

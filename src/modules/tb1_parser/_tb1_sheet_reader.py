@@ -3,7 +3,7 @@ import re
 
 from pandas import DataFrame, ExcelFile, read_excel
 
-from src.modules.tb1_parser._regex_lib import TB1 as config
+from ._regex_lib import TB1 as config
 
 
 class TB1SheetReader:
