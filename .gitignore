@@ -1,3 +1,7 @@
-**/.vscode
-**/.venv*
+**/.vscode/
+**/.venv*/
 **/__pycache__/
+**/dist/
+**/tb1_parser.egg-info/
+setup.py
+setup.cfg

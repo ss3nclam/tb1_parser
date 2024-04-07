@@ -1,1 +1,1 @@
-from . import *
+from .tb1_parser import *
