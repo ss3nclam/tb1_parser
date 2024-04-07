@@ -56,7 +56,6 @@ class AiSheetParser(SheetParser):
                     simple_range = re.findall(simple_range_regex, raw_range)
                     start= simple_range[0][0]
                     end = simple_range[0][2]
-                    # TODO Написать валидацию для простого диапазона
 
                 else:
                     # Поиск значений в очищеном инпуте
@@ -110,6 +109,7 @@ class AiSheetParser(SheetParser):
                 new.LW, new.HW = self.__parse_range(row.warning_range)
                 new.LA, new.HA = self.__parse_range(row.alarm_range)
                 new.LE, new.HE = self.__parse_range(row.error_range)
+                # TODO Написать валидацию границ уставок
 
                 out.append(new)
                 logging.info(f'{self._logs_owner}:{row.variable}: значения успешно получены')

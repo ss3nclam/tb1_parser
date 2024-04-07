@@ -18,7 +18,7 @@ class DiSheetParser(DoSheetParser):
 
 
     # REFACT Переписать метод парсинга наличия сигналов
-    def __parse_signal(self, input_value: str):
+    def __parse_signal(self, input_value: str) -> bool:
         return '+' in input_value
 
 

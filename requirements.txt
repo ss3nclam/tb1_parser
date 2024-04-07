@@ -8,6 +8,4 @@ setuptools==69.1.0
 six==1.16.0
 transliterate==1.10.2
 tzdata==2024.1
-windows-curses==2.3.2
 xlrd==2.0.1
-XlsxWriter==3.2.0
