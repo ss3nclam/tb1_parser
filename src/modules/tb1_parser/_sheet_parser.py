@@ -5,6 +5,7 @@ from pandas import DataFrame
 from transliterate import translit
 
 from ._regex_lib import PARSER as config
+from .types.signals_collection import SignalsCollection
 
 
 class SheetParser:
@@ -92,3 +93,11 @@ class SheetParser:
             out = None
         finally:
             return out
+
+
+    def get_result(self) -> SignalsCollection | None:
+        if out := self._result:
+            return out
+        else:
+            logging.error(f'{self._logs_owner}: перед получением результатов парсинга воспользуйтесь методом start()')
+            raise IndentationError

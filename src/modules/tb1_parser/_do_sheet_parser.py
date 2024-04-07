@@ -52,11 +52,3 @@ class DoSheetParser(SheetParser):
                 out.append(new)
         self._result = SignalsCollection(out)
         self._result.signals_type = 'Do'
-
-
-    def get_result(self) -> SignalsCollection | None:
-        if out := self._result:
-            return out
-        else:
-            logging.error(f'{self._logs_owner}: перед получением результатов парсинга воспользуйтесь методом start()')
-            raise IndentationError
