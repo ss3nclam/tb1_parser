@@ -5,7 +5,7 @@ from pandas import DataFrame
 from transliterate import translit
 
 from ._regex_lib import PARSER as config
-from .types.signals_collection import SignalsCollection
+from .signals_collection import SignalsCollection
 
 
 class SheetParser:

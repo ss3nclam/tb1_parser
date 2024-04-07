@@ -1,6 +1,6 @@
 from typing import Literal
 
-from ._signal import Signal
+from .signal import Signal
 
 
 class DoSignal(Signal):

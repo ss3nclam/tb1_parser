@@ -1,12 +1,12 @@
 import logging
 import sys
-from typing import Any, Literal
+from typing import Literal
 
 from pandas import DataFrame, ExcelFile
 
 from ._regex_lib import TB1 as config
 from ._tb1_sheet_reader import TB1SheetReader
-from .types.tb1_readed_sheets_collection import TB1ReadedSheetsCollection
+from ._tb1_readed_sheets_collection import TB1ReadedSheetsCollection
 
 
 all_avaible_sheets = list(config)
@@ -24,15 +24,15 @@ class TB1FileReader:
     def __read_file(self) -> ExcelFile:
         logging.info(f'{self.__logs_owner}: открытие файла "{self.__filepath}"..')
         try:
-            logging.info(f'{self.__logs_owner}: файл успешно открыт')
             excel_file = ExcelFile(self.__filepath)
+            logging.info(f'{self.__logs_owner}: файл успешно открыт')
             return excel_file
-        except Exception:
-            logging.error(f'{self.__logs_owner}: не удалось открыть файл')
+        except Exception as error:
+            logging.error(f'{self.__logs_owner}: не удалось открыть файл - {error}')
             sys.exit(1)
 
 
-    def isvalid_sheet_type(self, input: Any) -> bool:
+    def isvalid_sheet_type(self, input: str) -> bool:
         return input in all_avaible_sheets
 
 

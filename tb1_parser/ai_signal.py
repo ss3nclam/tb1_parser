@@ -1,4 +1,4 @@
-from ._signal import Signal
+from .signal import Signal
 
 
 class AiSignal(Signal):

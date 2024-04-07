@@ -4,8 +4,8 @@ from ._ai_sheet_parser import AiSheetParser
 from ._di_sheet_parser import DiSheetParser
 from ._do_sheet_parser import DoSheetParser
 from ._tb1_file_reader import TB1FileReader
-from .types.parsed_tb1_collection import ParsedTB1Collection
-from .types.tb1_readed_sheets_collection import TB1ReadedSheetsCollection
+from ._tb1_readed_sheets_collection import TB1ReadedSheetsCollection
+from .parsed_tb1_collection import ParsedTB1Collection
 
 
 class TB1Parser:
