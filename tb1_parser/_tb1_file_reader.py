@@ -5,8 +5,8 @@ from typing import Literal
 from pandas import DataFrame, ExcelFile
 
 from ._regex_lib import TB1 as config
-from ._tb1_sheet_reader import TB1SheetReader
 from ._tb1_readed_sheets_collection import TB1ReadedSheetsCollection
+from ._tb1_sheet_reader import TB1SheetReader
 
 
 all_avaible_sheets = list(config)
