@@ -12,6 +12,7 @@ class Signal(object):
         self.name: None | str
         self.formated_name: None | str
         self.plc_module: None | int | tuple[int]
+        self.plc_channel: None | int
 
 
     def __repr__(self) -> str:

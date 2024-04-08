@@ -3,5 +3,7 @@
 **/__pycache__/
 **/dist/
 **/tb1_parser.egg-info/
+**/temp/
+test.py
 setup.py
 setup.cfg
