@@ -2,9 +2,10 @@ import logging
 
 from pandas import DataFrame
 
+from tb1_parser import DiSignal, SignalsCollection
+
 from ._do_sheet_parser import DoSheetParser
 from ._regex_lib import TB1 as config
-from ._types import DiSignal, SignalsCollection
 
 
 class DiSheetParser(DoSheetParser):

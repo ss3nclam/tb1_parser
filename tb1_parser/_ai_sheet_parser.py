@@ -3,9 +3,10 @@ import re
 
 from pandas import DataFrame
 
+from tb1_parser import AiSignal, SignalsCollection
+
 from ._regex_lib import TB1
 from ._sheet_parser import SheetParser
-from ._types import AiSignal, SignalsCollection
 
 
 config = TB1['Ai']['regex']

@@ -4,8 +4,9 @@ import re
 from pandas import DataFrame
 from transliterate import translit
 
+from tb1_parser import SignalsCollection
+
 from ._regex_lib import PARSER as config
-from ._types import SignalsCollection
 
 
 class SheetParser:

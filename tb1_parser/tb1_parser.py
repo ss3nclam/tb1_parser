@@ -1,11 +1,12 @@
 import logging
 
+from tb1_parser import ParsedTB1Collection
+
 from ._ai_sheet_parser import AiSheetParser
 from ._di_sheet_parser import DiSheetParser
 from ._do_sheet_parser import DoSheetParser
 from ._tb1_file_reader import TB1FileReader
 from ._tb1_readed_sheets_collection import TB1ReadedSheetsCollection
-from ._types import ParsedTB1Collection
 
 
 class TB1Parser:
