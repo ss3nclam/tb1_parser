@@ -1,7 +1,3 @@
-from . import signal
-from . import ai_signal
-from . import di_signal
-from . import do_signal
-from . import signals_collection
-from . import parsed_tb1_collection
-from . import tb1_parser
+from ._types import (AiSignal, DiSignal, DoSignal, ParsedTB1Collection, Signal,
+                     SignalsCollection)
+from .tb1_parser import TB1Parser

@@ -5,8 +5,7 @@ from pandas import DataFrame
 
 from ._regex_lib import TB1
 from ._sheet_parser import SheetParser
-from .ai_signal import AiSignal
-from .signals_collection import SignalsCollection
+from ._types import AiSignal, SignalsCollection
 
 
 config = TB1['Ai']['regex']

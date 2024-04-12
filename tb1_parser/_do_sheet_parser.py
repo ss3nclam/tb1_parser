@@ -4,8 +4,7 @@ from pandas import DataFrame
 
 from ._regex_lib import TB1 as config
 from ._sheet_parser import SheetParser
-from .do_signal import DoSignal
-from .signals_collection import SignalsCollection
+from ._types import DoSignal, SignalsCollection
 
 
 class DoSheetParser(SheetParser):
