@@ -98,8 +98,9 @@ class AiSheetParser(SheetParser):
         out = []
 
         for row in self._sheet.itertuples(False, 'Signal'):
+            new = AiSignal()
+            
             try:
-                new = AiSignal()
                 new.plc_module = self._parse_plc_module(row.plc_module)
                 new.plc_channel = int(row.plc_channel)
                 new.variable = self._parse_variable(row.variable, row.plc_module)
@@ -112,10 +113,13 @@ class AiSheetParser(SheetParser):
                 new.LE, new.HE = self.__parse_range(row.error_range)
                 # TODO Написать валидацию границ уставок
 
-                out.append(new)
                 logging.info(f'{self._logs_owner}:{row.variable}: значения успешно получены')
+
             except Exception as error:
                 logging.error(f'{self._logs_owner}:{row.variable}: ошибка парсинга - {error}')
+
+            finally:
                 out.append(new)
+        
         self._result = SignalsCollection(out)
         self._result.signals_type = 'Ai'
