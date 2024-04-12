@@ -37,8 +37,9 @@ class DoSheetParser(SheetParser):
         out = []
 
         for row in self._sheet.itertuples(False, 'Signal'):
+            new = DoSignal()
+
             try:
-                new = DoSignal()
                 new.plc_module = self._parse_plc_module(row.plc_module)
                 new.plc_channel = int(row.plc_channel)
                 new.variable = self._parse_variable(row.variable, row.plc_module)
@@ -46,10 +47,13 @@ class DoSheetParser(SheetParser):
                 new.formated_name = self._format_signal_name(row.name)
                 new.logic_value = self._parse_logic_value(row.logic_value)
 
-                out.append(new)
                 logging.info(f'{self._logs_owner}:{row.variable}: значения успешно получены')
+
             except Exception as error:
                 logging.error(f'{self._logs_owner}:{row.variable}: ошибка парсинга - {error}')
+            
+            finally:
                 out.append(new)
+                
         self._result = SignalsCollection(out)
         self._result.signals_type = 'Do'
