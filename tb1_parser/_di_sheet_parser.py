@@ -29,8 +29,9 @@ class DiSheetParser(DoSheetParser):
         out = []
 
         for row in self._sheet.itertuples(False, 'Signal'):
+            new = DiSignal()
+
             try:
-                new = DiSignal()
                 new.plc_module = self._parse_plc_module(row.plc_module)
                 new.plc_channel = int(row.plc_channel)
                 new.variable = self._parse_variable(row.variable, row.plc_module)
@@ -42,10 +43,13 @@ class DiSheetParser(DoSheetParser):
                 new.error_signal = self.__parse_signal(row.error_signal)
                 new.tele_signal = self.__parse_signal(row.tele_signal)
 
-                out.append(new)
                 logging.info(f'{self._logs_owner}:{row.variable}: значения успешно получены')
+
             except Exception as error:
                 logging.error(f'{self._logs_owner}:{row.variable}: ошибка парсинга - {error}')
+
+            finally:
                 out.append(new)
+                
         self._result = SignalsCollection(out)
         self._result.signals_type = 'Di'
