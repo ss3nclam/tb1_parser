@@ -16,7 +16,8 @@ class Signal(object):
 
 
     def __repr__(self) -> str:
-        return f'{self.__class__.__name__}({str(self.__dict__)[1:-1]})'
+        out: str = ', '.join(f'{param_name}: {param_value}' for param_name, param_value in self.__dict__.items())
+        return f'{self.__class__.__name__}({out})'
     
 
     def isreserv(self) -> bool:
