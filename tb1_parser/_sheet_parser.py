@@ -6,6 +6,7 @@ from transliterate import translit
 
 from tb1_parser import SignalsCollection
 
+from ._plc_module import PLCModule
 from ._regex_lib import PARSER as config
 
 
@@ -89,16 +90,26 @@ class SheetParser:
 
     def _parse_plc_module(self, raw_string: str) -> str:
         try:
-            out = re.findall(config['signals']['find_plc_module'], raw_string)[0]
-            if not out:
+            raw_string = translit(raw_string, 'ru', reversed=True)
+            params = re.findall(config['signals']['find_plc_module'], raw_string)[0]
+
+            if len(params) != 4:
                 raise ValueError('ошибка сопоставления с шаблоном')
+            
+            # REFACT Переписать способ создания объекта Модуля ПЛК
+            # TODO Написать валидацию для поступающих частей сырой строки
+            out = PLCModule()
+            out.type, out.module = params[::3]
+            out.channels_count, out.some_num = map(int, params[1:3])
+            
         except Exception as error:
             logging.error(f'{self._logs_owner}: ошибка парсинга "{raw_string.replace('\n', '')}" модуля плк - {error}')
             out = None
+
         finally:
             return out
 
-
+ 
     def get_result(self) -> SignalsCollection | None:
         if out := self._result:
             return out

@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 
+from ._plc_module import PLCModule
+
 
 @dataclass
 class Signal(object):
@@ -11,12 +13,12 @@ class Signal(object):
         self.variable: None | str
         self.name: None | str
         self.formated_name: None | str
-        self.plc_module: None | int | tuple[int]
+        self.plc_module: None | PLCModule
         self.plc_channel: None | int
 
 
     def __repr__(self) -> str:
-        params: str = '(' + ', '.join(f'{param_name}: {param_value}' for param_name, param_value in self.__dict__.items()) + ')'
+        params: str = '(' + ', '.join(f'{key}: {value}' for key, value in self.__dict__.items()) + ')'
         return self.__class__.__name__ + params
     
 

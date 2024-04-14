@@ -137,6 +137,7 @@ PARSER = {
             'Уровень': 'L'
         },
         # 'find_plc_module': r'^\w{2}\-[a-z0-9-]+\,?\s+?\(?(\w(\d+).?(\d+))\)?$'
-        'find_plc_module': r'([IOAD]+.?\d+\D+\d+)\D{0,}\(?(\w\d+\-\d+)\)?'
+        # 'find_plc_module': r'([IOAD]+.?\d+\D+\d+)\D{0,}\(?(\w\d+\-\d+)\)?'
+        'find_plc_module': r'([IOAD]+).?(\d+)\w\D?(\d+)\S?\s{0,}\(?(\w\d+.\d+)\)?'
     }
 }
