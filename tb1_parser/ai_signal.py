@@ -17,3 +17,7 @@ class AiSignal(Signal):
         self.HL: None | float
         self.LE: None | float
         self.HE: None | float
+
+
+    def isprotected(self) -> bool:
+        return (self.LA or self.HA) is not None

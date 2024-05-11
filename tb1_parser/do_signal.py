@@ -11,4 +11,3 @@ class DoSignal(Signal):
         '''
         super().__init__()
         self.logic_value: None | Literal[1, 0]
-            

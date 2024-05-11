@@ -36,7 +36,7 @@ class DiSheetParser(DoSheetParser):
                 new.plc_channel = int(row.plc_channel)
                 new.variable = self._parse_variable(row.variable, row.plc_module)
                 new.name = self._clean_name(row.name)
-                new.formated_name = self._format_signal_name(row.name)
+                # new.formated_name = self._format_signal_name(row.name)
                 new.logic_value = self._parse_logic_value(row.logic_value)
                 new.alarm_signal = self.__parse_signal(row.alarm_signal)
                 new.warning_signal = self.__parse_signal(row.warning_signal)

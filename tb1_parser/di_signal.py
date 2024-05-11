@@ -12,4 +12,7 @@ class DiSignal(DoSignal):
         self.warning_signal: None | bool
         self.tele_signal: None | bool
         self.error_signal: None | bool
-            
+
+
+    def isprotected(self) -> bool:
+        return self.alarm_signal

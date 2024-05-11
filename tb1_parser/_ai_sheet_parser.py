@@ -8,7 +8,6 @@ from tb1_parser import AiSignal, SignalsCollection
 from ._regex_lib import TB1
 from ._sheet_parser import SheetParser
 
-
 config = TB1['Ai']['regex']
 
 
@@ -105,7 +104,7 @@ class AiSheetParser(SheetParser):
                 new.plc_channel = int(row.plc_channel)
                 new.variable = self._parse_variable(row.variable, row.plc_module)
                 new.name = self._clean_name(row.name)
-                new.formated_name = self._format_signal_name(row.name)
+                # new.formated_name = self._format_signal_name(row.name)
                 new.unit = row.unit if row.unit else self.__find_unit(row.range)
                 new.LL, new.HL = self.__parse_range(row.range)
                 new.LW, new.HW = self.__parse_range(row.warning_range)

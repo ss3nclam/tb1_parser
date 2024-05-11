@@ -13,5 +13,5 @@ for key, signals_collection in tb1.collection.items():
     for signal in signals_collection:
         signal: Signal
         
-        if not signal.isreserv():
+        if signal.isused() and signal.isprotected():
             print(signal)
