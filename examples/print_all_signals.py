@@ -1,8 +1,8 @@
 import os
+
 from tb1_parser import Signal, TB1Parser
 
-
-tb1 = TB1Parser('temp/table.xls')
+tb1 = TB1Parser('temp/table.xlsx')
 tb1.read()
 
 for key, signals_collection in tb1.collection.items():

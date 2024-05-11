@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from ._plc_module import PLCModule
+from .plc_module import PLCModule
 
 
 @dataclass

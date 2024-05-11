@@ -6,8 +6,8 @@ from transliterate import translit
 
 from tb1_parser import SignalsCollection
 
-from ._plc_module import PLCModule
 from ._regex_lib import PARSER as config
+from .plc_module import PLCModule
 
 
 class SheetParser:
