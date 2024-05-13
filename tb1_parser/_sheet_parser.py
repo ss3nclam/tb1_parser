@@ -35,39 +35,8 @@ class SheetParser:
             pass
 
 
-    # def _parse_variable(self, raw_variable: str, raw_plc_module: str) -> int | tuple[int]:
-    #     type_regex = r'^\D{2}'
-    #     clean_input = lambda x: re.sub(type_regex, '', x)
-    #     clear_variable = clean_input(raw_variable)
-    #     try:
-    #         if 'ai' in raw_variable.lower():
-    #             out = int(clear_variable)
-    #         else:
-    #             out = nums = tuple(map(int, clear_variable.split('-')))
-
-    #     except ValueError as value_error:
-    #         logging.warning(f'{self._logs_owner}: некорректный номер переменной "{raw_variable}"')
-    #         count_plc_channels = self._find_count_plc_channels(raw_plc_module)
-    #         nums = tuple(map(int, clear_variable.split('-')))
-
-    #         if len(nums) == 2:
-    #             logging.info(f'{self._logs_owner}: вычисление порядкового номера "{raw_variable}"')
-    #             out = count_plc_channels * nums[0] + nums[1]
-    #             logging.warning(f'{self._logs_owner}: номер переменной "{raw_variable}" принудительно нормализован - "{out}"')
-    #         else:
-    #             raise ValueError('попытка вычисления порядкового номера переменной провалена')
-            
-    #     except Exception as exception:
-    #         logging.error(f'{self._logs_owner}: ошибка парсинга "{raw_variable}" переменной - {type(exception).__name__}:{exception}')
-    #         out = None
-
-    #     finally:
-    #         return out
-
-
-    # FIXME Заглушка метода парсинга переменной сигнала
-    def _parse_variable(self, raw_variable: str, _):
-        return raw_variable
+    def _parse_variable(self, raw_variable: str) -> str:
+        return translit(raw_variable, 'ru', reversed=True)
 
     
     # REFACT Переписать метод транслитерациии названия параметра
