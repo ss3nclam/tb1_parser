@@ -40,7 +40,7 @@ class TB1SheetReader:
             return
     
 
-    def __find_sheet_columns(self, content_type: str, dataframe_head: list[list]) -> dict[str:int]: # REFACT Переписать метод поиска столбцов
+    def __find_sheet_columns(self, content_type: str, dataframe_head: list[list]) -> dict[str:int]:
         '''
         Приватный метод для поиска индексов колонок конкреного листа ТБ1, перечисленных в либе регулярок.\n
         На входе тип содержимого листа и датафрейм из его шапки с названиями колонок.

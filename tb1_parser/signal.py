@@ -18,7 +18,7 @@ class Signal(object):
 
 
     def __repr__(self) -> str:
-        params: str = '(' + ', '.join(f'{key}: {value}' for key, value in self.__dict__.items()) + ')'
+        params: str = '(' + '; '.join(f'{key}: {value}' for key, value in self.__dict__.items()) + ')'
         return self.__class__.__name__ + params
     
 

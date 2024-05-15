@@ -17,7 +17,6 @@ class DoSheetParser(SheetParser):
         self._result = None
 
 
-    # REFACT Переписать и отдебажить метод парсинга логического значения
     def _parse_logic_value(self, input_value: str | int):
         input_value = str(input_value)
         try:
