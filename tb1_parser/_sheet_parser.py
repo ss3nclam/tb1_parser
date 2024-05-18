@@ -20,7 +20,7 @@ class SheetParser:
 
 
     def _clean_name(self, input_value: str):
-        return input_value.replace('\n', '')
+        return input_value.strip().replace('\n', '')
 
 
     # REFACT Отрефакторить метод поиска количества каналов для модуля
