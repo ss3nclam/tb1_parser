@@ -23,18 +23,6 @@ class SheetParser:
         return input_value.strip().replace('\n', '')
 
 
-    # REFACT Отрефакторить метод поиска количества каналов для модуля
-    def _find_count_plc_channels(self, raw_plc_module: str):
-        try:
-            sheet: DataFrame = self._sheet
-            count: int = len(sheet[sheet['plc_module'] == raw_plc_module])
-            return count
-        except Exception as exception:
-            pass
-        finally:
-            pass
-
-
     def _parse_variable(self, raw_variable: str) -> str:
         return translit(raw_variable, 'ru', reversed=True)
 
@@ -65,8 +53,6 @@ class SheetParser:
             if len(params) != 4:
                 raise ValueError('ошибка сопоставления с шаблоном')
             
-            # REFACT Переписать способ создания объекта Модуля ПЛК
-            # TODO Написать валидацию для поступающих частей сырой строки
             out = PLCModule()
             out.type, out.module = params[::3]
             out.channels_count, out.some_num = map(int, params[1:3])
