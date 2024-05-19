@@ -37,6 +37,6 @@ class TB1Parser:
                     case _:
                         raise ValueError('передан неопознанный тип листа')
                 parser.start()
-                self.collection[sheet_type] = parser.get_result()
+                self.collection[sheet_type] = parser._get_result()
         except Exception as error:
             logging.error(f'{self.__logs_owner}: ошибка парсинга входных листов - {error}')

@@ -19,8 +19,8 @@ class SheetParser:
         self._result = None
 
 
-    def _clean_name(self, input_value: str):
-        return input_value.strip().replace('\n', '')
+    def _clean_name(self, raw_name: str) -> str:
+        return raw_name.strip().replace('\n', '')
 
 
     def _parse_variable(self, raw_variable: str) -> str:
@@ -65,7 +65,7 @@ class SheetParser:
             return out
 
  
-    def get_result(self) -> SignalsCollection | None:
+    def _get_result(self) -> SignalsCollection | None:
         if out := self._result:
             return out
         else:
