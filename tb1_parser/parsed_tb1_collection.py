@@ -1,19 +1,27 @@
+import logging
+from types import FunctionType
+
 from .signals_collection import SignalsCollection
 
 
 class ParsedTB1Collection(dict):
-    
-    def filter(self, key):
-        """Фильтрация сигналов в коллекции"""
-        
-        out = ParsedTB1Collection()
 
+    @property
+    def __logs_owner(self) -> str:
+        return self.__class__.__name__
+
+    def filter(self, key: FunctionType):
+        """Фильтрация сигналов в коллекции"""
+        filtered = ParsedTB1Collection()
         try:
-            for signal_type, signal_collection in self.items():
-                filtered_collection = (
-                    signal for signal in signal_collection if key(signal)
-                    )
-                out[signal_type] = SignalsCollection(filtered_collection)
-            return out
-        except Exception as identifier:
-            pass
+            if not isinstance(key, FunctionType):
+                raise TypeError("передан некорректный тип атрибута 'key'")
+            
+            for type, collection in self.items():
+                filtered[type] = SignalsCollection(
+                    signal for signal in collection if key(signal)
+                )
+            return filtered
+        
+        except Exception as error:
+            logging.error(f"{self.__logs_owner}: ошибка фильтрации сигналов: {error}")
