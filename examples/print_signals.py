@@ -1,17 +1,18 @@
 import os
 
-from tb1_parser import Signal, TB1Parser
+from tb1_parser import ParsedTB1Collection, TB1Parser
 
-tb1 = TB1Parser('temp/table.xlsx')
-tb1.read()
+parser = TB1Parser('temp/table.xlsx')
+parser.read()
 
-for key, signals_collection in tb1.collection.items():
+my_filter = lambda signal: signal.isused() and signal.isprotected()
 
-    boarder: str = f' {key} '.center(os.get_terminal_size().columns, '=')
-    print(f'\n{boarder}\n')
+tb1: ParsedTB1Collection = parser.collection
+filtered_collection = tb1.filter(key=my_filter)
 
-    for signal in signals_collection:
-        signal: Signal
-        
-        if signal.isused() and signal.isprotected():
+for signal_type, signals in filtered_collection.items():
+    if len(signals):
+        boarder: str = f' {signal_type} '.center(os.get_terminal_size().columns, '=')
+        print(f'\n{boarder}\n')
+        for signal in signals:
             print(signal)
