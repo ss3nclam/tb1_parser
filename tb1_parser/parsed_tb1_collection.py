@@ -16,7 +16,7 @@ class ParsedTB1Collection(dict):
         result = ParsedTB1Collection()
         try:
             if not isinstance(key, FunctionType):
-                raise TypeError("передан некорректный тип атрибута 'key'")
+                raise TypeError(f"переданный параметр 'key' не является функцией")
 
             for type, collection in self.items():
                 if filtered_collection := SignalsCollection(
@@ -35,5 +35,5 @@ class ParsedTB1Collection(dict):
             boarder: str = f" {signal_type} ".center(
                 os.get_terminal_size().columns, "-"
             )
-            out.append(boarder + '\n'.join(map(str, signals)))
-        return '\n\n'.join(out)
+            out.append(boarder + "\n".join(map(str, signals)))
+        return "\n\n".join(out)
