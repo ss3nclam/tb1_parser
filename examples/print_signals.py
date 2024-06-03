@@ -1,18 +1,19 @@
-from re import search
+import re
 
 from tb1_parser import ParsedTB1Collection, TB1Parser
 
-parser = TB1Parser("temp/table.xlsx")
-parser.read()
+tb1 = TB1Parser("temp/table.xlsx")
+tb1.read()
 
-tb1: ParsedTB1Collection = parser.collection
+signals: ParsedTB1Collection = tb1.collection
 
 my_filters = {
-    "Резервные:": lambda x: not x.isused(),
-    "Сигналы с защитой:": lambda x: x.isprotected(),
-    "Температурные:": lambda x: search(r"[Тт]емп", x.name),
+    "Температурные": lambda x: re.search(r"[Тт]емп", x.name),
+    "Сигналы с защитой": lambda x: x.isprotected(),
+    "Резервные": lambda x: not x.isused(),
+    "Резервные": 12
 }
 
 for name, filter in my_filters.items():
-    if filtered_signals := tb1.filter(key=filter):
-        print(f"\n{name}\n" + str(filtered_signals))
+    if filtered_signals := signals.filter(key=filter):
+        print(f"\n{name} ({filtered_signals.count}):\n" + str(filtered_signals))
