@@ -2,10 +2,10 @@ import logging
 
 from pandas import DataFrame
 
-from tb1_parser import DiSignal, SignalsCollection
-
 from ._do_sheet_parser import DoSheetParser
 from ._regex_lib import TB1 as config
+from .di_signal import DiSignal
+from .signals_collection import SignalsCollection
 
 
 class DiSheetParser(DoSheetParser):
@@ -19,7 +19,6 @@ class DiSheetParser(DoSheetParser):
 
     def __parse_signal(self, input_value: str) -> bool:
         return '+' in input_value
-
 
     def start(self) -> None:
         if not list(config['Di']['regex']['columns']['validate']['names'].keys()) == list(self._sheet):

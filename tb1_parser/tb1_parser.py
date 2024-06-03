@@ -16,7 +16,6 @@ class TB1Parser:
 
         self.collection = ParsedTB1Collection()
 
-
     def read(self):
         try:
             file_reader = TB1FileReader(self.__filepath)

@@ -12,7 +12,6 @@ class TB1SheetReader:
         self.__logs_owner: str = self.__class__.__name__
         self.__file = file
     
-
     def __find_sheet_name(self, content_type: str) -> str | None:
         '''
         Приватный метод для поиска названия конкретного листа ТБ1.\n
@@ -39,7 +38,6 @@ class TB1SheetReader:
             logging.error(f'{self.__logs_owner}:{content_type}: ошибка поиска названия листа - {error}')
             return
     
-
     def __find_sheet_columns(self, content_type: str, dataframe_head: list[list]) -> dict[str:int]:
         '''
         Приватный метод для поиска индексов колонок конкреного листа ТБ1, перечисленных в либе регулярок.\n
@@ -86,7 +84,6 @@ class TB1SheetReader:
         finally:
             return out
 
-    
     def __read_sheet(self, content_type: str) -> None | DataFrame: # REFACT Переписать метод чтения листов
         '''
         Приватный метод для чтения конкретного листа ТБ1.
@@ -155,7 +152,6 @@ class TB1SheetReader:
         sheet = sheet[[*columns]].copy()
 
         return sheet
-
 
     def get(self, content_type: str) -> None | DataFrame:
         return self.__read_sheet(content_type)

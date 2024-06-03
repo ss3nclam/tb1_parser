@@ -3,10 +3,10 @@ import re
 
 from pandas import DataFrame
 
-from tb1_parser import AiSignal, SignalsCollection
-
 from ._regex_lib import TB1
 from ._sheet_parser import SheetParser
+from .ai_signal import AiSignal
+from .signals_collection import SignalsCollection
 
 config = TB1['Ai']['regex']
 
@@ -19,7 +19,6 @@ class AiSheetParser(SheetParser):
 
         self._result = None
 
-
     # REFACT Переписать метод парсинга единицы измерения из диапазона
     def __find_unit(self, range: str) -> str:
         out = None
@@ -31,7 +30,6 @@ class AiSheetParser(SheetParser):
             logging.error(f'{self._logs_owner}: ошибка поиска единицы измерения в "{range}" диапазоне измерения - {error}')
         finally:
             return out
-
 
     # REFACT Отрефакторить метод парсинга диапазонов
     def __parse_range(self, raw_range: str | None) -> list:
@@ -89,7 +87,6 @@ class AiSheetParser(SheetParser):
             logging.error(f'{self._logs_owner}: ошибка получения диапазона из "{raw_range}" - {exception}')
             return [*['parse_error']*2]
 
-    
     def start(self) -> None:
         if not list(config['columns']['validate']['names'].keys()) == list(self._sheet):
             logging.error(f'{self._logs_owner}: передан неверный лист аналоговых сигналов')

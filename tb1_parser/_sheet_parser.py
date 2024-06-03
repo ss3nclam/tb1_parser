@@ -18,15 +18,12 @@ class SheetParser:
 
         self._result = None
 
-
     def _clean_name(self, raw_name: str) -> str:
         return raw_name.strip().replace('\n', '')
-
 
     def _parse_variable(self, raw_variable: str) -> str:
         return translit(raw_variable, 'ru', reversed=True)
 
-    
     # REFACT Переписать метод транслитерациии названия параметра
     # def _format_signal_name(self, name: str) -> str:
     #     replace_data = config['signals']['format_variable_name']
@@ -44,7 +41,6 @@ class SheetParser:
     #     finally:
     #         return out
     
-
     def _parse_plc_module(self, raw_string: str) -> str:
         try:
             raw_string = translit(raw_string, 'ru', reversed=True)
@@ -64,7 +60,6 @@ class SheetParser:
         finally:
             return out
 
- 
     def _get_result(self) -> SignalsCollection | None:
         if out := self._result:
             return out

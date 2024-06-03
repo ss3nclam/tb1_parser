@@ -8,7 +8,6 @@ from ._regex_lib import TB1 as config
 from ._tb1_readed_sheets_collection import TB1ReadedSheetsCollection
 from ._tb1_sheet_reader import TB1SheetReader
 
-
 all_avaible_sheets = list(config)
 
 
@@ -20,7 +19,6 @@ class TB1FileReader:
 
         self.sheets: TB1ReadedSheetsCollection[str, DataFrame] = {}
 
-
     def __read_file(self) -> ExcelFile:
         logging.info(f'{self.__logs_owner}: открытие файла "{self.__filepath}"..')
         try:
@@ -31,10 +29,8 @@ class TB1FileReader:
             logging.error(f'{self.__logs_owner}: не удалось открыть файл - {error}')
             sys.exit(1)
 
-
     def isvalid_sheet_type(self, input: str) -> bool:
         return input in all_avaible_sheets
-
 
     def read(self, sheets: str | list[Literal['Ai', 'Di', 'Do']] = all_avaible_sheets):
         logging.info(f'{self.__logs_owner}: начало чтения ТБ1..')
@@ -49,7 +45,6 @@ class TB1FileReader:
                 self.sheets[sheet] = sheet_reader.get(sheet)
         if isinstance(sheets, str):
             self.sheets[sheets] = sheet_reader.get(sheets)
-
 
     def get(self, sheet: Literal['Ai', 'Di', 'Do']):
         return self.sheets.get(sheet)

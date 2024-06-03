@@ -2,10 +2,10 @@ import logging
 
 from pandas import DataFrame
 
-from tb1_parser import DoSignal, SignalsCollection
-
 from ._regex_lib import TB1 as config
 from ._sheet_parser import SheetParser
+from .do_signal import DoSignal
+from .signals_collection import SignalsCollection
 
 
 class DoSheetParser(SheetParser):
