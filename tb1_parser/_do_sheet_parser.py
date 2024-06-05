@@ -55,4 +55,3 @@ class DoSheetParser(SheetParser):
                 out.append(new)
                 
         self._result = SignalsCollection(out)
-        self._result.signals_type = 'Do'
