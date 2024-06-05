@@ -1,3 +1,4 @@
+from .plc_module import PLCModule
 from .signal import Signal
 from .ai_signal import AiSignal
 from .di_signal import DiSignal
