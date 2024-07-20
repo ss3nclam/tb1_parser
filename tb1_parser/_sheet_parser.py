@@ -18,7 +18,7 @@ class SheetParser:
         self._result = None
 
     def _clean_name(self, raw_name: str) -> str:
-        return raw_name.strip().replace('\n', '')
+        return re.sub(r'[\n\t]|\s{2,}', '', raw_name.strip())
 
     def _parse_variable(self, raw_variable: str) -> str:
         return translit(raw_variable, 'ru', reversed=True)
