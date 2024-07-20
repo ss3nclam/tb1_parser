@@ -22,23 +22,6 @@ class SheetParser:
 
     def _parse_variable(self, raw_variable: str) -> str:
         return translit(raw_variable, 'ru', reversed=True)
-
-    # REFACT Переписать метод транслитерациии названия параметра
-    # def _format_signal_name(self, name: str) -> str:
-    #     replace_data = config['signals']['format_variable_name']
-    #     try:
-    #         for key, value in replace_data.items():
-    #             name = re.sub(key, value, name)
-    #         name = translit(name, 'ru', reversed=True)
-    #         name = re.split(r'\s+|\-|\,', name)
-    #         name = (word for word in name if word != '')
-    #         name = '_'.join(name).replace('\'', '')
-    #         out: str = name
-    #     except Exception as error:
-    #         logging.error(f'{self._logs_owner}: ошибка транслитерации "{name}" названия параметра - {error}')
-    #         out = None
-    #     finally:
-    #         return out
     
     def _parse_plc_module(self, raw_string: str) -> str:
         try:
