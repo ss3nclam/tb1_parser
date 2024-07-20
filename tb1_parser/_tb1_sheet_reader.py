@@ -135,8 +135,9 @@ class TB1SheetReader:
         
         # Переименование столбцов и очистка датафрейма от мусора
         sheet = sheet.rename(columns=dict(zip(list(sheet), existing_columns)))
+        sheet = sheet[sheet['variable'].str.contains(r'AI|DI|DO')].dropna(axis=0, how='all').reset_index()  # Читать только строки с сигналами
         # sheet = sheet.loc[sheet['name'] != 'Резерв'].dropna(axis=0, how='all').reset_index() # Читать без резервов
-        sheet = sheet.dropna(axis=0, how='all').reset_index() # С резервами
+        # sheet = sheet.dropna(axis=0, how='all').reset_index() # С резервами
         del sheet['index']
 
         # Добавление в датафрейм столбцов, которые есть в либе регулярок, но нет в ТБ1
@@ -151,6 +152,7 @@ class TB1SheetReader:
                 sheet[empty_col] = None
         sheet = sheet[[*columns]].copy()
 
+        print(sheet)
         return sheet
 
     def get(self, content_type: str) -> None | DataFrame:
