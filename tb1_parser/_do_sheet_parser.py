@@ -43,7 +43,6 @@ class DoSheetParser(SheetParser):
                 new.plc_channel = int(row.plc_channel)
                 new.variable = self._parse_variable(row.variable)
                 new.name = self._clean_name(row.name)
-                # new.formated_name = self._format_signal_name(row.name)
                 new.logic_value = self._parse_logic_value(row.logic_value)
 
                 logging.info(f'{self._logs_owner}:{row.variable}: значения успешно получены')
