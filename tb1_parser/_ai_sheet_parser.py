@@ -33,6 +33,7 @@ class AiSheetParser(SheetParser):
 
     # REFACT Отрефакторить метод парсинга диапазонов
     def __parse_range(self, raw_range: str | None) -> list:
+        raw_range = str(raw_range)
         start = end = None
         try:
             # Отсев пустого диапазона
@@ -65,6 +66,8 @@ class AiSheetParser(SheetParser):
                                 start = match[1]
                             elif '>' in match[0]:
                                 end = match[1]
+                            else:
+                                raise ValueError('в диапазоне указано лишь одно число без опознавательных знаков или слов')  # Заглушка
                     elif matches_count == 2:
                         start, end = [i[1] for i in matches_list]
                     else:
