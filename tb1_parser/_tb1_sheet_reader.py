@@ -151,8 +151,6 @@ class TB1SheetReader:
                 f'{self.__logs_owner}: принудительное создание и заполнение столбца "{empty_col}" для листа "{content_type}"')
                 sheet[empty_col] = None
         sheet = sheet[[*columns]].copy()
-
-        print(sheet)
         return sheet
 
     def get(self, content_type: str) -> None | DataFrame:
