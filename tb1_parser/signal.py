@@ -19,7 +19,7 @@ class Signal(object):
         self.plc_channel: None | int
 
     def isused(self) -> bool:
-        return translit(self.name, 'ru', reversed=True).lower() != 'rezerv'
+        return translit(self.name, 'ru', reversed=True).lower() not in ('rezerv', 'net podkljuchenija', 'ne podkljucheno')
 
     def isprotected(self) -> bool:
         pass  # FIXME Заглушка метода для родителя
