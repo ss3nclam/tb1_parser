@@ -87,7 +87,7 @@ class AiSheetParser(SheetParser):
                 return out
 
         except Exception as exception:
-            logging.error(f'{self._logs_owner}: ошибка получения диапазона из "{raw_range}" - {exception}')
+            logging.warning(f'{self._logs_owner}: ошибка получения диапазона из "{raw_range}" - {exception}')
             return [*['parse_error']*2]
 
     def start(self) -> None:
