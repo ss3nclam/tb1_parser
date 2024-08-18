@@ -12,11 +12,11 @@ class Signal(object):
         '''
         Дата-класс. Шаблон для наследования.
         '''
-        self.variable: None | str
-        self.name: None | str
-        self.formated_name: None | str
-        self.plc_module: None | PLCModule
-        self.plc_channel: None | int
+        self.variable: None | str = None
+        self.name: None | str = None
+        self.formated_name: None | str = None
+        self.plc_module: None | PLCModule = None
+        self.plc_channel: None | int = None
 
     def isused(self) -> bool:
         return translit(self.name, 'ru', reversed=True).lower() not in ('rezerv', 'net podkljuchenija', 'ne podkljucheno')
