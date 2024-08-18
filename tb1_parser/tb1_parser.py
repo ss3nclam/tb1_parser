@@ -24,7 +24,7 @@ class TB1Parser:
             readed_sheets: TB1ReadedSheetsCollection = file_reader.sheets
 
             for sheet_type, sheet_dataframe in readed_sheets.items():
-                logging.info(f'{self.__logs_owner}:{sheet_type}: начало парсинга..')
+                logging.info(f'{self.__logs_owner}:{sheet_type}: парсинг..')
                 match sheet_type:
                     case 'Ai':
                         parser = AiSheetParser(sheet_dataframe)
@@ -36,5 +36,6 @@ class TB1Parser:
                         raise ValueError('передан неопознанный тип листа')
                 parser.start()
                 self.collection[sheet_type] = parser._get_result()
+                logging.info(f'{self.__logs_owner}:{sheet_type}: данные получены')
         except Exception as error:
             logging.error(f'{self.__logs_owner}: ошибка парсинга входных листов - {error}')

@@ -32,7 +32,7 @@ class AiSheetParser(SheetParser):
             return out
 
     # REFACT Отрефакторить метод парсинга диапазонов
-    def __parse_range(self, raw_range: str | None) -> list:
+    def __parse_range(self, raw_range: str | None, who: str) -> list:
         raw_range = str(raw_range)
         start = end = None
         try:
@@ -81,13 +81,13 @@ class AiSheetParser(SheetParser):
                 # Если стартовое значение больше конечного
                 if len(out) == 2 and None not in out:
                     if out[0] > out[1]:
-                        logging.warning(f'{self._logs_owner}: предупреждение при получении диапазона из "{raw_range}" - некорректно заполнено в ТБ1')
+                        logging.warning(f'{self._logs_owner}:{who}: предупреждение при получении диапазона из "{raw_range}" - некорректно заполнено в ТБ1')
                         out = sorted(out)
-                        logging.warning(f'{self._logs_owner}: диапазон "{raw_range}" принудительно нормализован - {tuple(out)}')
+                        logging.warning(f'{self._logs_owner}:{who}: диапазон "{raw_range}" принудительно нормализован - {tuple(out)}')
                 return out
 
         except Exception as exception:
-            logging.warning(f'{self._logs_owner}: ошибка получения диапазона из "{raw_range}" - {exception}')
+            logging.warning(f'{self._logs_owner}:{who}: ошибка получения диапазона из "{raw_range}" - {exception}')
             return [*['parse_error']*2]
 
     def start(self) -> None:
@@ -105,13 +105,13 @@ class AiSheetParser(SheetParser):
                 new.variable = self._parse_variable(row.variable)
                 new.name = self._clean_name(row.name)
                 new.unit = row.unit if row.unit else self.__find_unit(row.range)
-                new.LL, new.HL = self.__parse_range(row.range)
-                new.LW, new.HW = self.__parse_range(row.warning_range)
-                new.LA, new.HA = self.__parse_range(row.alarm_range)
-                new.LE, new.HE = self.__parse_range(row.error_range)
+                new.LL, new.HL = self.__parse_range(row.range, who=row.variable)
+                new.LW, new.HW = self.__parse_range(row.warning_range, who=row.variable)
+                new.LA, new.HA = self.__parse_range(row.alarm_range, who=row.variable)
+                new.LE, new.HE = self.__parse_range(row.error_range, who=row.variable)
                 # TODO Написать валидацию границ уставок
 
-                logging.info(f'{self._logs_owner}:{row.variable}: значения успешно получены')
+                # logging.info(f'{self._logs_owner}:{row.variable}: значения успешно получены')
 
             except Exception as error:
                 logging.error(f'{self._logs_owner}:{row.variable}: ошибка парсинга - {error}')
