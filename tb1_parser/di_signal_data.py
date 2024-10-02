@@ -1,7 +1,7 @@
-from .do_signal import DoSignal
+from .do_signal_data import DoSignalData
 
 
-class DiSignal(DoSignal):
+class DiSignalData(DoSignalData):
 
     def __init__(self) -> None:
         '''

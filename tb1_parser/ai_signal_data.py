@@ -1,7 +1,7 @@
-from .signal import Signal
+from .signal_data import SignalData
 
 
-class AiSignal(Signal):
+class AiSignalData(SignalData):
 
     def __init__(self) -> None:
         '''

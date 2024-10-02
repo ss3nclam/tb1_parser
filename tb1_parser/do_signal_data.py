@@ -1,9 +1,9 @@
 from typing import Literal
 
-from .signal import Signal
+from .signal_data import SignalData
 
 
-class DoSignal(Signal):
+class DoSignalData(SignalData):
 
     def __init__(self) -> None:
         '''

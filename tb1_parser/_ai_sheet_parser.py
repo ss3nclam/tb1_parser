@@ -5,7 +5,7 @@ from pandas import DataFrame
 
 from ._regex_lib import TB1
 from ._sheet_parser import SheetParser
-from .ai_signal import AiSignal
+from .ai_signal_data import AiSignalData
 from .signals_collection import SignalsCollection
 
 config = TB1['Ai']['regex']
@@ -97,7 +97,7 @@ class AiSheetParser(SheetParser):
         out = []
 
         for row in self._sheet.itertuples(False, 'Signal'):
-            new = AiSignal()
+            new = AiSignalData()
             
             try:
                 new.plc_module = self._parse_plc_module(row.plc_module)

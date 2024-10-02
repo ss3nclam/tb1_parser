@@ -4,7 +4,7 @@ from pandas import DataFrame
 
 from ._regex_lib import TB1 as config
 from ._sheet_parser import SheetParser
-from .do_signal import DoSignal
+from .do_signal_data import DoSignalData
 from .signals_collection import SignalsCollection
 
 
@@ -36,7 +36,7 @@ class DoSheetParser(SheetParser):
         out = []
 
         for row in self._sheet.itertuples(False, 'Signal'):
-            new = DoSignal()
+            new = DoSignalData()
 
             try:
                 new.plc_module = self._parse_plc_module(row.plc_module)

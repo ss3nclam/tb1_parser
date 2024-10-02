@@ -6,7 +6,7 @@ from .plc_module import PLCModule
 
 
 @dataclass
-class Signal(object):
+class SignalData(object):
     
     def __init__(self) -> None:
         '''
